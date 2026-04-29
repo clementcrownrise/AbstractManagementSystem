@@ -1,0 +1,22 @@
+{% extends 'accounts/dashboard.html' %}
+
+{% block content %}
+    {{ form.media }}
+
+
+  <h1 class="app-page-title">Submit An Abstract</h1>
+                <div class="app-card app-card-accordion shadow-sm mb-4">
+				    <div class="app-card-header p-4 pb-2  border-0">
+				    </div><!--//app-card-header-->
+				    <div class="app-card-body p-4 pt-0">
+					  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p|safe }}
+    <button type="submit" class="btn btn-primary w-100">
+    Submit Article
+</button>
+</form>
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+{% endblock  %}

@@ -1,0 +1,312 @@
+{% load static %}
+
+{% include 'includes/topbar.html' %}
+	
+       {% include 'includes/sidebar.html' %}
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			   
+			
+		{% block content %}
+				    {% include 'includes/alerts.html' %}
+
+                  
+				<div class="app-card app-card-accordion shadow-sm mb-4">
+					
+				    <div class="app-card-header p-4 pb-2  border-0">
+						  <h3>{{ article.title}}</h3>
+				    </div><!--//app-card-header-->
+					
+				    <div class="app-card-body p-4 pt-0">
+						
+                        <table>
+                            <tr>
+                                <td width="300px"><h5>Submited to:</h5></td>
+                                <td>{{ article.conference }}
+                                    <hr>
+                                </td>
+                            </tr>
+                            
+                             <tr>
+                                <td><b>Introduction:</b></td>
+                                <td><p style="text-align:justify">{{ article.introduction|safe }}</p>
+                                  <hr></td>
+                            </tr>
+                               <tr>
+                                <td><b>Payment Evidence:</b></td>
+                                <td>
+                                    <img src="{{article.paymentevidence.url}}" alt="paymentevidence"
+                                    width="600px">
+                                      <hr>
+                                </td>
+                            </tr>
+                               </tr>
+                               <tr>
+                                <td><b>Document:</b></td>
+                                <td> 
+                                    <a href="{{article.document.url}}">Click to download document </a>
+                                      <hr>
+                                </td>
+                            </tr>
+                                <tr>
+                                <td><b>Status:</b>
+                                </td>
+                                <td>{{ article.status }}  <hr></td>
+                            </tr>
+                             </tr>
+                                <tr>
+                                <td><b>Submitted on :</b></td>
+                                <td>{{ article.submitted_at }}</td>
+                            </tr>
+                        </table>
+                        
+						 
+						
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+                {% if request.user.user_type == 'admin' %}
+				<div class="app-card app-card-accordion shadow-sm mb-4">
+					
+				    <div class="app-card-header p-4 pb-2  border-0">
+						  <h4>Assign Reviewer(s)
+                          <a id="addmore" class="btn btn-info">Click to Add more reviewers</a></h4><i>use the button above if you want to add more than one reveiwer</i>
+				    </div><!--//app-card-header-->
+					
+
+
+				    <div class="app-card-body p-4 pt-0">
+						
+                        
+             <!-- multi select is here -->
+ <form action="{% url 'assign_reviewer' article.id %}" method="POST">
+    {% csrf_token %}
+ <table id="table" class="w-100">
+    
+    <tr>
+        <td>Select Reviewer</td>
+        <td>  
+          <select name="reviewer" id="reviewers" class="form-control">
+    <option value="">Select a Reviewer</option>
+    {% for  id, email in revieweremails %}
+        <option value="{{ id }}">{{ email }}</option>
+    {% endfor %}
+</select>
+                    </td>
+                    <td></td>
+        <br>
+    </tr>
+ </table>
+  <script>
+
+        var i = 0;
+        $('#addmore').click(function() {
+            i++;
+       $('#table').append(
+        ` <tr style="margin-bottom:4px">
+             <td>
+                Select Reviewer
+            <td>
+              <td>
+                 <select name="reviewer" id="reviewers"  class="form-control">
+    <option value="">Select a Reviewer</option>
+    {% for  id, email in revieweremails %}
+        <option value="{{ id }}">{{ email }}</option>
+    {% endfor %}
+</select>
+              </td>
+              <td><a id="removeins" class="btn btn-danger">Remove</a><td>
+            </tr>`
+       )   
+          });
+
+          //for remove button 
+          $(document).on('click','#removeins', function(){
+            $(this).closest('tr').remove();
+          })
+
+       </script>
+       <br>
+        <br>
+       <input type="submit"  type="submit" value="Add Reviewer" class="btn btn-primary">
+ </form>
+ <!-- it ends here -->           
+						 <br>
+        <br>
+						<hr>
+                        <b>Below are already added reviewer(s):</b> You can click on the x to remove a reviewer<br><br>
+                        {% for assigned_reviewer in assigned_reviewers %}
+
+
+                            <p class="alert alert-info">
+                              <a href="{% url 'remove_reviewer' article.id assigned_reviewer.reviewer.id  %}">
+                                <b> <button class="cancel-btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+       fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button> -</b></a>   
+                                {{ assigned_reviewer.reviewer.first_name }} - 
+                                {{assigned_reviewer.reviewer.email }}| 
+                               <b>Date Assigned:</b> 
+                                {{  assigned_reviewer.assigned_at }}</p>
+                        {% endfor %}
+                        <hr>
+
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+                
+                {% endif %}
+
+                {% if request.user.user_type == 'candidate' %}
+                    	<div class="app-card app-card-accordion shadow-sm mb-4">
+					
+				    <div class="app-card-header p-4 pb-2  border-0">
+						  <h4>Add Comment</h4>
+				    </div><!--//app-card-header-->
+					
+				    <div class="app-card-body p-4 pt-0">
+						
+                        <form action="{% url 'comment' article.id %}" method="POST">
+                            {% csrf_token %}
+
+                            <table class="w-100">
+                               
+                                  <tr>
+                                    
+                                    <td>
+                                        <br>
+                                        <label for="">Comment</label>
+                                        <textarea name="comment" id="comment" cols="5" class="form-control " 
+                                        style="min-height: 200px;"></textarea>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><br>
+                                        
+                                         <button type="submit" class="btn btn-primary" 
+                                         value="candidate"> Submit</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        
+						 
+						
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+                {% endif %}
+
+                    {% if request.user.user_type != 'candidate' %}
+				<div class="app-card app-card-accordion shadow-sm mb-4">
+					
+				    <div class="app-card-header p-4 pb-2  border-0">
+						  <h4>Add Comment</h4>
+				    </div><!--//app-card-header-->
+					
+				    <div class="app-card-body p-4 pt-0">
+						
+                        <form action="{% url 'comment' article.id %}" method="POST">
+                            {% csrf_token %}
+                            <table class="w-100">
+                                <tr>
+                                    <td>
+                                        <label for="">Select </label>
+                                        <select name="status" id="" class="form-control" required>
+                                            <option value="" selected >Select</option>
+                                            <option value="approved">Approved</option>
+                                            <option value="approved">Rejected</option>
+                                            <option value="approved">Approved with minor corrections</option>
+                                             <option value="approved">Approved with major corrections</option>
+
+                                        </select>
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    
+                                    <td>
+                                        <br>
+                                        <label for="">Comment</label>
+                                        <textarea name="comment" id="comment" cols="5" class="form-control " style="min-height: 200px;"></textarea></td>
+                                        <script>
+    tinymce.init({
+        selector: '#commenta',
+        height: 300,
+        width: '100%',
+        menubar: true,
+        plugins: 'lists link image table code',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code'
+    });
+</script>
+                                    </tr>
+                                    
+                                <tr>
+                                    <td><br>
+                                    <button type="submit" class="btn btn-primary" 
+                                         value="admin"> Submit</button>  
+                                                                          </td>
+                                </tr>
+                            </table>
+                        </form>
+                        
+						 
+						
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+                {% endif %}
+
+                {% for comment in comments %}
+                   <div class="app-card alert alert-dismissible shadow-sm
+                 mb-4 border-left-decoration" role="alert">
+				    <div class="inner">
+					    <div class="app-card-body p-3 p-lg-4">
+						    <div class="row gx-5 gy-3">
+						        <div class="col-12 col-lg-12">
+							       
+							                                               
+
+                                          <div style="display: flex; align-items:center; gap:6px">
+                                            <div><img src="{% static 'images/user-com.png' %}" width="50" alt=""></div>
+                                              <div><p><h6>{{ comment.status}}</h6>
+                                               {{ comment.comment|safe}}<br>
+                                                
+                                                                           
+                                                 </p>
+                                                 <hr>
+                                                  <i><b>Posted By:</b> {{ comment.user.first_name}},
+                                                     <b> On: </b>{{comment.created_at}} 
+                                                </i>
+                                                </div>
+</p>
+                                          </div>
+                                        
+                                    
+							    <div class="col-12 col-lg-3">
+							
+							    </div><!--//col-->
+						    </div><!--//row-->
+					    </div><!--//app-card-body-->
+					    
+				    </div><!--//inner-->
+			    </div><!--//app-card-->
+				    </div>
+    
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
+
+                	 
+
+
+							
+        {% endblock  %}
+		  {% include 'includes/footer.html' %}
+
