@@ -107,25 +107,28 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
+import dj_database_url
+import os
 
-# Parse the DATABASE_URL variable
-db_config = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# 1. Clear any existing DATABASES definition and use this:
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
-# If it parsed something, ensure the ENGINE is set to the new Psycopg 3 driver
-if db_config:
-    db_config['ENGINE'] = 'django.db.backends.postgresql'
-    DATABASES = {
-        'default': db_config
-    }
-else:
-    # This is a safety fallback for local development
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'railway',
-        }
-    }
-
+# 2. Add this specific fix for Railway network connections:
+if DATABASES['default']:
+    # Ensure the engine is correct for psycopg 3
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
+    
+    # Force host and port if dj_database_url missed them
+    if not DATABASES['default'].get('HOST'):
+        # This prevents the "socket" error by forcing a network connection
+        DATABASES['default']['HOST'] = os.environ.get('PGHOST', 'switchyard.proxy.rlwy.net')
+        DATABASES['default']['PORT'] = os.environ.get('PGPORT', '46908')
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
