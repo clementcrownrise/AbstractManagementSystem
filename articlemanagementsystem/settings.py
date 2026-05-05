@@ -107,12 +107,29 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
+#DATABASES = {
+#    'default': dj_database_url.config(
+#        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+#        conn_max_age=600
+#    )
+#}
+
+
+
+# Check if we are running on Railway or Locally
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    # Use the fast internal network when live
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+else:
+    # Use the public/external URL when working on your PC
+    # Paste your actual Public URL from Railway here or put it in a local .env file
+    DATABASE_URL = "postgresql://postgres:QoGPSEgeGEXytjJiYakNgtCNSqROSAoA@switchyard.proxy.rlwy.net:46908/railway"
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600
-    )
+    'default': dj_database_url.config(default=DATABASE_URL)
 }
+
+
 
 # DATABASES = {
 #     'default': {
