@@ -15,6 +15,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +30,7 @@ SECRET_KEY = 'django-insecure-$jq5v17h%)%6g8fl0@gbd7wvbk9)vch#1p^pyq2axt&om5h2cs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.railway.app']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
