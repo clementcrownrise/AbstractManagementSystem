@@ -1,5 +1,5 @@
 
-
+print("SETTINGS LOADED SUCCESSFULLY")
 """
 Django settings for articlemanagementsystem project.
 
@@ -113,22 +113,40 @@ import os
 import dj_database_url
 import os
 
-# This will now pull the variables you just linked in the dashboard
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+import dj_database_url
+import os
 
-# Force network connection if dj_database_url misses the host
-if DATABASES['default']:
-    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
-    # Adding this prevents the "socket" error
-    if not DATABASES['default'].get('HOST'):
-        DATABASES['default']['HOST'] = os.environ.get('PGHOST')
-        DATABASES['default']['PORT'] = os.environ.get('PGPORT')
+# 1. Attempt to parse the DATABASE_URL
+db_config = dj_database_url.config(
+    default=os.environ.get('DATABASE_URL'),
+    conn_max_age=600,
+    ssl_require=True
+)
+
+# 2. Force the ENGINE if it's missing (this stops the Dummy backend error)
+if db_config:
+    db_config['ENGINE'] = 'django.db.backends.postgresql'
+    DATABASES = {
+        'default': db_config
+    }
+else:
+    # 3. Last resort: Hardcode the dictionary using the individual variables
+    # This ensures that even if DATABASE_URL fails, the other variables work
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('PGDATABASE', 'railway'),
+            'USER': os.environ.get('PGUSER'),
+            'PASSWORD': os.environ.get('PGPASSWORD'),
+            'HOST': os.environ.get('PGHOST'),
+            'PORT': os.environ.get('PGPORT'),
+        }
+    }
+
+# DEBUG: This will show up in your Railway Deploy logs
+if not DATABASES['default'].get('USER'):
+    print("CRITICAL ERROR: Database variables are NOT being read from the environment!")
+
 
 # DATABASES = {
 #     'default': {
