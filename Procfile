@@ -1,1 +1,1 @@
-web: gunicorn yourprojectname.wsgi
+web: python manage.py migrate && gunicorn articlemanagementsystem.wsgi
