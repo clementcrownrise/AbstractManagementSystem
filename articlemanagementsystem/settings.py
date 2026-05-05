@@ -202,12 +202,17 @@ MEDIA_ROOT = BASE_DIR /'media'
 DEFAULT_FROM_EMAIL = 'notifications@wacsabstracts.org'
 SERVER_EMAIL = 'notifications@wacsabstracts.org'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'live.smtp.mailtrap.io'
 EMAIL_HOST_USER = 'api'
-EMAIL_HOST_PASSWORD = '4207163438e21b52491bcef1f0ae8732'
-EMAIL_PORT = 2525
+EMAIL_HOST_PASSWORD = 'f5ba621fa3087da049f0303ea1f5266d'
+EMAIL_PORT = '587'
+
 EMAIL_USE_TLS = True   # MUST be True for 587/2525
 EMAIL_USE_SSL = False  # MUST be False
+
+
+
 
 from django.contrib.messages import constants as messages
 
