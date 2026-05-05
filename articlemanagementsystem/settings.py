@@ -107,11 +107,22 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
+#DATABASES = {
+#    'default': dj_database_url.config(
+#        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+#        conn_max_age=600
+#    )
+#}
+
+# If RAILWAY_ENVIRONMENT exists, we are live in the cloud
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    DATABASE_URL = os.environ.get('DATABASE_URL') # Internal
+else:
+    # Use the Public URL when working locally
+    DATABASE_URL = os.environ.get('DATABASE_PUBLIC_URL') 
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600
-    )
+    'default': dj_database_url.config(default=DATABASE_URL)
 }
 
 # DATABASES = {
