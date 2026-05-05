@@ -114,16 +114,22 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    )
 #}
 
-# If RAILWAY_ENVIRONMENT exists, we are live in the cloud
-if os.environ.get('RAILWAY_ENVIRONMENT'):
-    DATABASE_URL = os.environ.get('DATABASE_URL') # Internal
-else:
-    # Use the Public URL when working locally
-    DATABASE_URL = os.environ.get('DATABASE_PUBLIC_URL') 
+# 1. Get the URL from the environment
+db_url = os.environ.get('DATABASE_URL')
 
+# 2. Configure the database
 DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
+    'default': dj_database_url.config(
+        default=db_url,
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
+
+# 3. Double-check if the URL was actually found
+if not DATABASES['default'].get('NAME'):
+    # This is a fallback for local development if the URL is missing
+    print("WARNING: DATABASE_URL not found. Check your environment variables.")
 
 # DATABASES = {
 #     'default': {
