@@ -1,2 +1,2 @@
-web: python manage.py migrate && create_admin.py  &&  gunicorn articlemanagementsystem.wsgi 
+web: python create_admin.py  &&  gunicorn articlemanagementsystem.wsgi 
 
