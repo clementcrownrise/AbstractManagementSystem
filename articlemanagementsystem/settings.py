@@ -107,24 +107,24 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
-# 1. Get the URL from Railway
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# 2. Assign it with a hardcoded ENGINE fallback
-DATABASES = {
-    'default': db_from_env
-}
+# Parse the DATABASE_URL variable
+db_config = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# 3. Explicitly set the engine if the parser failed
-if DATABASES['default']:
-    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
-else:
-    # This handles the case where DATABASE_URL is missing entirely
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
+# If it parsed something, ensure the ENGINE is set to the new Psycopg 3 driver
+if db_config:
+    db_config['ENGINE'] = 'django.db.backends.postgresql'
+    DATABASES = {
+        'default': db_config
     }
-
+else:
+    # This is a safety fallback for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'railway',
+        }
+    }
 
 # DATABASES = {
 #     'default': {
