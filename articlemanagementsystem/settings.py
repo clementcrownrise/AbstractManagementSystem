@@ -30,7 +30,10 @@ SECRET_KEY = 'django-insecure-$jq5v17h%)%6g8fl0@gbd7wvbk9)vch#1p^pyq2axt&om5h2cs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = [os.environ.get('RAILWAY_PUBLIC_DOMAIN', '*'), '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = [f"https://{os.environ.get('RAILWAY_PUBLIC_DOMAIN')}"]
 
 # Application definition
 
@@ -100,10 +103,13 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    }
 #}
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
+#DATABASES = {
+#    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+#}
 
+DATABASES = {
+            'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+        }
 
 
 
@@ -164,7 +170,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",   # your source files
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # collected files for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # collected files for production
 
 #media files
 MEDIA_URL = '/media/'
