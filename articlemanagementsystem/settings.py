@@ -107,19 +107,23 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
+# 1. Get the URL from Railway
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+# 2. Assign it with a hardcoded ENGINE fallback
 DATABASES = {
-    'default': dj_database_url.config(
-        # This looks for the DATABASE_URL environment variable automatically
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': db_from_env
 }
 
-if not DATABASES['default'].get('ENGINE'):
-    print("CRITICAL: ENGINE is missing. Check your DATABASE_URL variable!")
-
-
+# 3. Explicitly set the engine if the parser failed
+if DATABASES['default']:
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
+else:
+    # This handles the case where DATABASE_URL is missing entirely
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+    }
 
 
 # DATABASES = {
