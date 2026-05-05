@@ -110,7 +110,10 @@ AUTH_USER_MODEL = 'accounts.Account'
 import dj_database_url
 import os
 
-# 1. Clear any existing DATABASES definition and use this:
+import dj_database_url
+import os
+
+# This will now pull the variables you just linked in the dashboard
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
@@ -119,16 +122,14 @@ DATABASES = {
     )
 }
 
-# 2. Add this specific fix for Railway network connections:
+# Force network connection if dj_database_url misses the host
 if DATABASES['default']:
-    # Ensure the engine is correct for psycopg 3
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
-    
-    # Force host and port if dj_database_url missed them
+    # Adding this prevents the "socket" error
     if not DATABASES['default'].get('HOST'):
-        # This prevents the "socket" error by forcing a network connection
-        DATABASES['default']['HOST'] = os.environ.get('PGHOST', 'switchyard.proxy.rlwy.net')
-        DATABASES['default']['PORT'] = os.environ.get('PGPORT', '46908')
+        DATABASES['default']['HOST'] = os.environ.get('PGHOST')
+        DATABASES['default']['PORT'] = os.environ.get('PGPORT')
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
