@@ -28,8 +28,7 @@ SECRET_KEY = 'django-insecure-$jq5v17h%)%6g8fl0@gbd7wvbk9)vch#1p^pyq2axt&om5h2cs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['.railway.app']
 
 # Application definition
 
@@ -59,6 +58,7 @@ TINYMCE_DEFAULT_CONFIG = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -164,10 +164,20 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '8c406525ffd3ad'
-EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
-EMAIL_PORT = '2525'
+#EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+#EMAIL_HOST_USER = '8c406525ffd3ad'
+#EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
+#EMAIL_PORT = '2525'
+
+DEFAULT_FROM_EMAIL = 'info@wacscoac.org'
+SERVER_EMAIL = 'info@wacscoac.org'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'live.smtp.mailtrap.io'
+EMAIL_HOST_USER = 'api'
+EMAIL_HOST_PASSWORD = '4207163438e21b52491bcef1f0ae8732'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True   # MUST be True for 587/2525
+EMAIL_USE_SSL = False  # MUST be False
 
 from django.contrib.messages import constants as messages
 
