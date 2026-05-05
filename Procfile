@@ -1,2 +1,2 @@
-release: python manage.py migrate && python manage.py createsuperuser --noinput
-web: gunicorn articlemanagementsystem.wsgi
+web: python manage.py migrate && gunicorn articlemanagementsystem.wsgi
+
