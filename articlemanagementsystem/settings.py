@@ -1,4 +1,9 @@
 
+from pathlib import Path
+import dj_database_url
+import os
+from dotenv import load_dotenv
+
 print("SETTINGS LOADED SUCCESSFULLY")
 """
 Django settings for articlemanagementsystem project.
@@ -13,9 +18,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 
-from pathlib import Path
-import dj_database_url
-import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$jq5v17h%)%6g8fl0@gbd7wvbk9)vch#1p^pyq2axt&om5h2cs'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -199,13 +202,13 @@ MEDIA_ROOT = BASE_DIR /'media'
 #EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
 #EMAIL_PORT = '2525'
 
-DEFAULT_FROM_EMAIL = 'notifications@wacsabstracts.org'
-SERVER_EMAIL = 'notifications@wacsabstracts.org'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'live.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'api'
-EMAIL_HOST_PASSWORD = 'f5ba621fa3087da049f0303ea1f5266d'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = '587'
 
 EMAIL_USE_TLS = True   # MUST be True for 587/2525
