@@ -5,7 +5,7 @@ from faculty.models import Faculty
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
-from article.models import Article, ArticleReviewer
+from article.models import Article, ArticleReviewer, Casereport
 
 
 #for email verification
@@ -48,11 +48,16 @@ def register(request):
             user.save()
             messages.success(request,"Your account has been created successfully, please login below")
             mail_subject = 'Account Registration Notification'
+            link =request.build_absolute_uri(
+                f"/abstracts/"
+            )
             message = render_to_string('accounts/registrationEmail.html',{
                 'user':user,
+                'link':link
             })
             to_email = user.email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email.content_subtype = 'html'
             send_email.send()
             return redirect('login')
 
@@ -273,12 +278,32 @@ def dashboard(request):
 
         return render(request, 'accounts/reviewer/dashboard.html', context)
     
-    elif request.user.user_type == 'admin':
-        articles = Article.objects.filter(user__faculty = request.user.faculty).order_by('-submitted_at')
 
-        totalapproved = Article.objects.filter(user__faculty =request.user.faculty).filter(status = 'approved').count()
-        totalpending = Article.objects.filter(user__faculty =request.user.faculty).filter(status = 'pending').count()
-        totalrejected = Article.objects.filter(user__faculty =request.user.faculty).filter(status = 'rejected').count()
+    
+    elif request.user.user_type == 'admin' and not request.user.faculty:
+        faculties = Faculty.objects.all()
+        articles = Article.objects.all().order_by('-submitted_at')
+        totalapproved = Article.objects.filter(status = 'approved').count()
+        totalpending = Article.objects.filter(status = 'pending').count()
+        totalrejected = Article.objects.filter().filter(status = 'rejected').count()
+        totalsubmitted  = articles.count()
+
+        context = {
+            'articles':articles,
+            'faculties':faculties,
+             'totalsubmitted':totalsubmitted,
+            'totalapproved':totalapproved,
+            'totalpending':totalpending,
+            'totalrejected':totalrejected
+        }
+        return render(request, 'accounts/admin/dashboard.html',context)
+    elif request.user.user_type == 'admin' and request.user.faculty is not None:
+        #print(request.user.faculty)
+        articles = Article.objects.filter(faculty = request.user.faculty).order_by('-submitted_at')
+
+        totalapproved = Article.objects.filter(faculty =request.user.faculty).filter(status = 'approved').count()
+        totalpending = Article.objects.filter(faculty =request.user.faculty).filter(status = 'pending').count()
+        totalrejected = Article.objects.filter(faculty =request.user.faculty).filter(status = 'rejected').count()
         totalsubmitted  = articles.count()
 
         context = {
@@ -290,13 +315,14 @@ def dashboard(request):
         }
         return render(request, 'accounts/admin/dashboard.html',context)
     else:
-          
+        casereports = Casereport.objects.filter(user=request.user).order_by('-id')
         totalapproved = Article.objects.filter(user=request.user).filter(status = 'approved').count()
         totalpending = Article.objects.filter(user=request.user).filter(status = 'pending').count()
         totalrejected = Article.objects.filter(user=request.user).filter(status = 'rejected').count()
-        articles = Article.objects.filter(user =request.user).order_by('-submitted_at')
+        articles = Article.objects.filter(user =request.user).order_by('-id')
         totalsubmitted  = articles.count()
         context = {'articles':articles,
+                'casereports':casereports,
                 'totalsubmitted':totalsubmitted,
                 'totalapproved':totalapproved,
                 'totalpending':totalpending,

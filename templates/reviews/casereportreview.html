@@ -14,12 +14,14 @@
 			
 		{% block content %}
 				    {% include 'includes/alerts.html' %}
-
-                  
-				<div class="app-card app-card-accordion shadow-sm mb-4">
+<br>
+                  <a href="{% static 'downloads/AbstractReviewToolCasereports.pdf' %}" target="_blank">
+                    Abstract Review Tool(Case Report)</a>
+			<br>	<br>
+                  <div class="app-card app-card-accordion shadow-sm mb-4">
 					
 				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h3>{{ article.title}}</h3>
+						  <h3>{{ casereport.title}}</h3>
 				    </div><!--//app-card-header-->
 					
 				    <div class="app-card-body p-4 pt-0">
@@ -27,14 +29,14 @@
                         <table>
                             <tr>
                                 <td width="200px"><h5>Submited to:</h5></td>
-                                <td>{{ article.conference }}
+                                <td>{{ casereport.conference }}
                                     <hr>
                                 </td>
                             </tr>
                                <tr>
                                 <td><b>Faculty/Speciality:</b></td>
                                 <td>
-                                    {{article.faculty}}
+                                    {{casereport.faculty}}
                                       <hr>
                                 </td>
                             </tr>
@@ -43,9 +45,9 @@
                                 <td><b>Presenter:</b></td>
                                 <td> 
                                    <div class="row">
-                                    <div class="col-md-4"><b>Presenter's Name:</b> {{article.presentername}}</div>
-                                    <div class="col-md-4"><b>Presenter's Email:</b> {{article.presenteremail}}</div>
-                                    <div class="col-md-4"><b>Presenter's Phone:</b> {{article.presenterphone}}</div>
+                                    <div class="col-md-4"><b>Presenter's Name:</b> {{casereport.presentername}}</div>
+                                    <div class="col-md-4"><b>Presenter's Email:</b> {{casereport.presenteremail}}</div>
+                                    <div class="col-md-4"><b>Presenter's Phone:</b> {{casereport.presenterphone}}</div>
                                    </div>
                                    <hr>
                                 </td>
@@ -80,45 +82,19 @@
             <tr>
                 <td><b>Introduction:</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.introduction|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.introduction|safe }}</p>
                     <hr>
                 </td>
             </tr>
-  <tr>
-                <td><b>Methods:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.methods|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
+ 
             
- <tr>
-                <td><b>Results:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.results|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
 
-             <tr>
-                <td><b>Conclusion:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.conclusion|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-             <tr>
-                <td><b>Limitations:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.limitations|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
+     
 
              <tr>
                 <td><b>Keywords:</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.keywords|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.keywords|safe }}</p>
                     <hr>
                 </td>
             </tr>
@@ -133,52 +109,24 @@
               <tr>
                 <td><b>  Titre/Title :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frtitle|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frtitle|safe }}</p>
                     <hr>
                 </td>
             </tr>
                        <tr>
                 <td><b> Contexte/Introduction :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frintroduction|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-  <tr>
-                <td><b> Méthodes :</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frmethods|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-            
- <tr>
-                <td><b>Résultats:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frresults|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frintroduction|safe }}</p>
                     <hr>
                 </td>
             </tr>
 
-             <tr>
-                <td><b>Conclusion:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frconclusion|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-             <tr>
-                <td><b>Limitations:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frlimitations|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
+    
 
              <tr>
                 <td><b> Mots clés :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frkeywords|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frkeywords|safe }}</p>
                     <hr>
                 </td>
             </tr>
@@ -191,12 +139,12 @@
                  <tr>
                                 <td><b>Status:</b>
                                 </td>
-                                <td>{{ article.status }}  <hr></td>
+                                <td>{{ casereport.status }}  <hr></td>
                             </tr>
                              </tr>
                                 <tr>
                                 <td><b>Submitted on :</b></td>
-                                <td>{{ article.submitted_at }}</td>
+                                <td>{{ casereport.submitted_at }}</td>
                             </tr>
                         </table>
                         
@@ -219,7 +167,7 @@
 						
                         
              <!-- multi select is here -->
- <form action="{% url 'assign_reviewer' article.id %}" method="POST">
+ <form action="{% url 'assign_reviewer' casereport.id %}" method="POST">
     {% csrf_token %}
  <table id="table" class="w-100">
     
@@ -300,99 +248,141 @@
                 
                 {% endif %}
 
-                
-                {% if  existingResults and request.user.user_type == 'admin' %}
-   	<div class="app-card app-card-accordion shadow-sm mb-4">
-					
-				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h4>Reports</h4>
-				    </div><!--//app-card-header-->
-					
-				    <div class="app-card-body p-4 pt-0">
-                        <table class="w-100">
-                         
-                       
-						{% for existingResult in existingResults %}
-                        
-                        <tr class="mb-2"><td><b>{{ existingResult.reviewer }}</b>,</td>
-                            <td><b>Title Score:</b> <br>{{ existingResult.introductionscore }}, </td>
-                            <td><b>Introduciton Score:</b><br> {{ existingResult.titlescore }}, </td>
-                            <td><b>Methods Score:</b><br>{{ existingResult.methodscore }}, </td>
-                            <td><b>Result Score:</b><br>{{ existingResult.resultscore }}, </td>
-                            <td><b>Conclusion Score:</b><br>{{ existingResult.conclusioncore }}, </td>
-                            <td><b>Overral Score:</b><br>{{ existingResult.overallscore }}, </td>
-                            <td><b>Total Score:</b><br>{{ existingResult.totalscore }}, </td>
-                       </tr>
-                        
-						 {% endfor %}
-						 </table>
-				    </div><!--//app-card-body-->
-				</div><!--//app-card-->
-                {% endif %}
-
-                {% if request.user.user_type == 'candidate' %}
-                    	<div class="app-card app-card-accordion shadow-sm mb-4">
-					
-				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h4>Add Comment</h4>
-				    </div><!--//app-card-header-->
-					
-				    <div class="app-card-body p-4 pt-0">
-						
-                        <form action="{% url 'comment' article.id %}" method="POST">
-                            {% csrf_token %}
-
-                            <table class="w-100">
-                               
-                                  <tr>
-                                    
-                                    <td>
-                                        <br>
-                                        <label for="">Comment</label>
-                                        <textarea name="comment" id="comment" cols="5" class="form-control " 
-                                        style="min-height: 200px;"></textarea>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><br>
-                                        
-                                         <button type="submit" class="btn btn-primary" 
-                                         value="candidate"> Submit</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        
-						 
-						
-				    </div><!--//app-card-body-->
-				</div><!--//app-card-->
-                {% endif %}
+            
 
                     {% if request.user.user_type != 'candidate' %}
 				<div class="app-card app-card-accordion shadow-sm mb-4">
 					
 				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h4>Add Comment</h4>
+						  <h4>Add Result</h4>
 				    </div><!--//app-card-header-->
 					
 				    <div class="app-card-body p-4 pt-0">
 						
-                        <form action="{% url 'comment' article.id %}" method="POST">
+                        <form action="{% url 'reviewerResult' casereport.id %}" method="POST">
                             {% csrf_token %}
-                            <table class="w-100">
+                          <table class="w-100">
                                 <tr>
                                     <td>
-                                        <label for="">Select </label>
-                                        <select name="status" id="" class="form-control" required>
-                                            <option value="" selected >Select</option>
-                                            <option value="Accepted">Accepted</option>
-                                            <option value="Rejected">Rejected</option>
-                                            <option value="Accepted as Poster">Accepted as Poster</option>
-                                             <option value="Accepted as Podium">Accepted as Podium</option>
+                                        <table>
+                                        {% if existingResults %}
+                                        <h5>You already provided report for this abstract,</h5><br>
+                                            {% for existingResult in existingResults %}
+                                               <p> <b>Title Score:</b>   {{existingResult.titlescore}}</p> 
+                                                <p> <b>Introdution Score:</b>   {{existingResult.introductionscore}}</p> 
+                                              <p> <b>Result Score:</b>   {{existingResult.resultscore}}</p> 
+                                               <p> <b>Conclusion  Score:</b>   {{existingResult.conclusionscore}}</p> 
+                                                <p> <b>Overrall Score:</b>   {{existingResult.overallscore}}</p> 
+                                                <hr>
+                                                <h6> <b>Total Score:</b>   {{existingResult.totalscore}}</h6> 
+                                            {% endfor %}
+                                             <tr>
+                                        {% endif %}
+                                    <td>
+                                        <label for=""></label>
+                                    <input type="hidden" name="reviewer_id" value="{{ assignment.reviewer.id }}"/>
+                                    <input type="hidden" name="token" value="{{assignment.token}}">
+                                    <input type="hidden" name="formtype" value="casereport">
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    <td>
+                                        <label for="">Title Score</label>
+                                    <select name="titlescore" id="" 
+                                    class="form-control w-100 mb-2 score-sel" required>
+                                   <option value="" selected>Select Score</option>
 
-                                        </select>
+                                        <option value="0">0</option>
+                                        <option value="0.5">0.5</option>
+                                        <option value="1">1</option>
+                                    </select>
+                                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="">Introduction Score</label>
+                                    <select name="introductionscore" id="" class="form-control w-100 mb-2 score-sel" required>
+     <option value="" selected>Select Score</option>
+                         
+                                        <option value="0">0</option>
+                                        <option value="0.5">0.5</option>
+                                        <option value="1">1</option>
+                                    </select>
+                                </td>
+                                </tr>
+                                  <tr>
+                                 
+                                    
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    <td>
+                                         <label for="">Result Score</label>
+                                  
+                                        <select name="resultscore" id="" class="form-control w-100 mb-2 score-sel" required>
+                      <option value="" selected>Select Score</option>
+                     <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    <td>
+                                         <label for="">Conclusion Score</label>
+                                        <select name="conclusionscore" id="" class="form-control w-100 mb-2 score-sel" required>
+                                          <option value="" selected>Select Score</option>
+
+                                            <option value="1">1</option>
+                                        <option value="2">2</option>
+                                      
+                                    </select>
+                                    </td>
+                                </tr>
+                                   <tr>
+                                    <td>
+                                        <label for="">Overrall Score</label>
+                                      <select name="overallscore" id="" class="form-control w-100 mb-2 score-sel" required>
+                                        <option value="" selected>Select Score</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                         <option value="3">3</option>
+                                        <option value="4">4</option>
+                                         <option value="5">5</option>
+                                      
+                                    </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><hr>
+                                        <label for="">Total Score</label>
+                                        <input type="text" name="totalscore" id="total_score" readonly class="form-control">
+                                        <script>
+                                            $(document).ready(function() {
+
+    function calculateTotal() {
+
+        let total = 0;
+
+        $('.score-sel').each(function() {
+
+            total += parseFloat($(this).val()) || 0;
+
+        });
+
+        $('#total_score').val(total);
+    }
+
+    // Calculate whenever a select changes
+    $('.score-sel').on('change', function() {
+        calculateTotal();
+    });
+
+    // Initial calculation
+    calculateTotal();
+
+});
+                                        </script>
                                     </td>
                                 </tr>
                                   <tr>
@@ -400,25 +390,21 @@
                                     <td>
                                         <br>
                                         <label for="">Comment</label>
-                                        <textarea name="comment" id="comment" cols="5" class="form-control " style="min-height: 200px;"></textarea></td>
-                                        <script>
-    tinymce.init({
-        selector: '#commenta',
-        height: 300,
-        width: '100%',
-        menubar: true,
-        plugins: 'lists link image table code',
-        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code'
-    });
-</script>
+                                        <textarea name="comment" id="comment" cols="5" 
+                                        class="form-control " style="min-height: 200px;"></textarea></td>
+                                       
                                     </tr>
                                     
-                                <tr>
-                                    <td><br>
-                                    <button type="submit" class="btn btn-primary" 
-                                         value="admin"> Submit</button>  
-                                                                          </td>
+                               
+                                        </table>
+                                    </td>
+                                    <td><img src="{% static 'images/casereport.png' %}" width="600px"
+                                         class="d-block my-auto" alt=""></td>
                                 </tr>
+                               <tr>
+                                <td colspan="2"> <button type="submit" class="btn btn-primary" 
+                                         value="admin"> Submit</button> </td>
+                               </tr>
                             </table>
                         </form>
                         

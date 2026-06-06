@@ -19,7 +19,7 @@
 				<div class="app-card app-card-accordion shadow-sm mb-4">
 					
 				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h3>{{ article.title}}</h3>
+						  <h3>{{ casereport.title}}</h3>
 				    </div><!--//app-card-header-->
 					
 				    <div class="app-card-body p-4 pt-0">
@@ -27,14 +27,14 @@
                         <table>
                             <tr>
                                 <td width="200px"><h5>Submited to:</h5></td>
-                                <td>{{ article.conference }}
+                                <td>{{ casereport.conference }}
                                     <hr>
                                 </td>
                             </tr>
                                <tr>
                                 <td><b>Faculty/Speciality:</b></td>
                                 <td>
-                                    {{article.faculty}}
+                                    {{casereport.faculty}}
                                       <hr>
                                 </td>
                             </tr>
@@ -43,9 +43,9 @@
                                 <td><b>Presenter:</b></td>
                                 <td> 
                                    <div class="row">
-                                    <div class="col-md-4"><b>Presenter's Name:</b> {{article.presentername}}</div>
-                                    <div class="col-md-4"><b>Presenter's Email:</b> {{article.presenteremail}}</div>
-                                    <div class="col-md-4"><b>Presenter's Phone:</b> {{article.presenterphone}}</div>
+                                    <div class="col-md-4"><b>Presenter's Name:</b> {{casereport.presentername}}</div>
+                                    <div class="col-md-4"><b>Presenter's Email:</b> {{casereport.presenteremail}}</div>
+                                    <div class="col-md-4"><b>Presenter's Phone:</b> {{casereport.presenterphone}}</div>
                                    </div>
                                    <hr>
                                 </td>
@@ -54,7 +54,7 @@
                     <tr>
                                 <td><b>Authors:</b></td>
                                 <td> 
-                    {% for author in article.authors.all %}
+                    {% for author in casereport.authors.all %}
                  <div class="row mb-3">
              
             <div class="class col-md-3"><b>Fullname</b><br>
@@ -80,45 +80,16 @@
             <tr>
                 <td><b>Introduction:</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.introduction|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-  <tr>
-                <td><b>Methods:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.methods|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-            
- <tr>
-                <td><b>Results:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.results|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.casereport|safe }}</p>
                     <hr>
                 </td>
             </tr>
 
-             <tr>
-                <td><b>Conclusion:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.conclusion|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-             <tr>
-                <td><b>Limitations:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.limitations|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
 
              <tr>
                 <td><b>Keywords:</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.keywords|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.keywords|safe }}</p>
                     <hr>
                 </td>
             </tr>
@@ -133,52 +104,24 @@
               <tr>
                 <td><b>  Titre/Title :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frtitle|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frtitle|safe }}</p>
                     <hr>
                 </td>
             </tr>
                        <tr>
                 <td><b> Contexte/Introduction :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frintroduction|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frcasereport|safe }}</p>
                     <hr>
                 </td>
             </tr>
-  <tr>
-                <td><b> Méthodes :</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frmethods|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-            
- <tr>
-                <td><b>Résultats:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frresults|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-
-             <tr>
-                <td><b>Conclusion:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frconclusion|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
-             <tr>
-                <td><b>Limitations:</b></td>
-                <td>
-                    <p style="text-align:justify">{{ article.frlimitations|safe }}</p>
-                    <hr>
-                </td>
-            </tr>
+ 
+  
 
              <tr>
                 <td><b> Mots clés :</b></td>
                 <td>
-                    <p style="text-align:justify">{{ article.frkeywords|safe }}</p>
+                    <p style="text-align:justify">{{ casereport.frkeywords|safe }}</p>
                     <hr>
                 </td>
             </tr>
@@ -191,12 +134,12 @@
                  <tr>
                                 <td><b>Status:</b>
                                 </td>
-                                <td>{{ article.status }}  <hr></td>
+                                <td>{{ casereport.status }}  <hr></td>
                             </tr>
                              </tr>
                                 <tr>
                                 <td><b>Submitted on :</b></td>
-                                <td>{{ article.submitted_at }}</td>
+                                <td>{{ casereport.submitted_at }}</td>
                             </tr>
                         </table>
                         
@@ -219,7 +162,7 @@
 						
                         
              <!-- multi select is here -->
- <form action="{% url 'assign_reviewer' article.id %}" method="POST">
+ <form action="{% url 'casereportassign_reviewer' casereport.id %}" method="POST">
     {% csrf_token %}
  <table id="table" class="w-100">
     
@@ -279,7 +222,7 @@
 
 
                             <p class="alert alert-info">
-                              <a href="{% url 'remove_reviewer' article.id assigned_reviewer.reviewer.id  %}">
+                              <a href="{% url 'remove_reviewercasereport' casereport.id assigned_reviewer.reviewer.id  %}">
                                 <b> <button class="cancel-btn">
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
        fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -300,8 +243,9 @@
                 
                 {% endif %}
 
-                
-                {% if  existingResults and request.user.user_type == 'admin' %}
+
+
+                      {% if  existingResults and request.user.user_type == 'admin' %}
    	<div class="app-card app-card-accordion shadow-sm mb-4">
 					
 				    <div class="app-card-header p-4 pb-2  border-0">
@@ -330,56 +274,19 @@
 				</div><!--//app-card-->
                 {% endif %}
 
-                {% if request.user.user_type == 'candidate' %}
-                    	<div class="app-card app-card-accordion shadow-sm mb-4">
-					
-				    <div class="app-card-header p-4 pb-2  border-0">
-						  <h4>Add Comment</h4>
-				    </div><!--//app-card-header-->
-					
-				    <div class="app-card-body p-4 pt-0">
-						
-                        <form action="{% url 'comment' article.id %}" method="POST">
-                            {% csrf_token %}
-
-                            <table class="w-100">
-                               
-                                  <tr>
-                                    
-                                    <td>
-                                        <br>
-                                        <label for="">Comment</label>
-                                        <textarea name="comment" id="comment" cols="5" class="form-control " 
-                                        style="min-height: 200px;"></textarea>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><br>
-                                        
-                                         <button type="submit" class="btn btn-primary" 
-                                         value="candidate"> Submit</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                        
-						 
-						
-				    </div><!--//app-card-body-->
-				</div><!--//app-card-->
-                {% endif %}
+            
 
                     {% if request.user.user_type != 'candidate' %}
 				<div class="app-card app-card-accordion shadow-sm mb-4">
 					
 				    <div class="app-card-header p-4 pb-2  border-0">
 						  <h4>Add Comment</h4>
+                          
 				    </div><!--//app-card-header-->
 					
 				    <div class="app-card-body p-4 pt-0">
 						
-                        <form action="{% url 'comment' article.id %}" method="POST">
+                        <form action="{% url 'casereportcomment' casereport.id %}" method="POST">
                             {% csrf_token %}
                             <table class="w-100">
                                 <tr>

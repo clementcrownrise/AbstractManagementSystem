@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'conference',
     'article',
     'tinymce',
+    'reviewers',
+    'authors',
 ]
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -111,44 +113,30 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 #}
 
-#DATABASES = {
-#    'default': dj_database_url.config(
-#        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-#        conn_max_age=600
-#    )
-#}
-
-# 1. Get the URL from the environment
-db_url = os.environ.get('DATABASE_URL')
-
-# 2. Configure the database
 DATABASES = {
-    'default': dj_database_url.config(
-        default=db_url,
-        conn_max_age=600,
-        ssl_require=True
-    )
+   'default': dj_database_url.config(
+       default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+       conn_max_age=600
+   )
 }
 
-# 3. Double-check if the URL was actually found
-if not DATABASES['default'].get('NAME'):
-    # This is a fallback for local development if the URL is missing
-    print("WARNING: DATABASE_URL not found. Check your environment variables.")
+# # 1. Get the URL from the environment
+# db_url = os.environ.get('DATABASE_URL')
 
+# # 2. Configure the database
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'wacsams',
-#         'USER': 'root',
-#         'PASSWORD': 'password',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },
-#     }
+#     'default': dj_database_url.config(
+#         default=db_url,
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
 # }
+
+# # 3. Double-check if the URL was actually found
+# if not DATABASES['default'].get('NAME'):
+#     # This is a fallback for local development if the URL is missing
+#     print("WARNING: DATABASE_URL not found. Check your environment variables.")
+
 
 
 # Password validation
@@ -198,19 +186,19 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
 
-#EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-#EMAIL_HOST_USER = '8c406525ffd3ad'
-#EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
-#EMAIL_PORT = '2525'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '8c406525ffd3ad'
+EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
+EMAIL_PORT = '2525'
 
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+# SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = '587'
+# EMAIL_HOST = os.environ.get('EMAIL_HOST')
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = '587'
 
 EMAIL_USE_TLS = True   # MUST be True for 587/2525
 EMAIL_USE_SSL = False  # MUST be False

@@ -1,0 +1,243 @@
+{% extends 'accounts/dashboard.html' %}
+
+{% block content %}
+    {{ casereportform.media }}
+
+
+
+  <h1 class="app-page-title">Submit  Case Report</h1>
+
+<!-- Heading is above -->
+
+                <div class="app-card app-card-accordion shadow-sm mb-4">
+				    <div class="app-card-header p-4 pb-2  border-0">
+				    </div><!--//app-card-header-->
+				    <div class="app-card-body p-4 pt-0">
+      
+
+<!-- case reportform here -->
+<div id="casereport" >
+<form method="POST">
+  {% csrf_token %}
+ 
+  
+    <input type="hidden" name="abstracttype" value="casereport">
+
+
+<div class="mb-3">
+        <label "><b>Select Conference</b>*</label>
+        {{ casereportform.conference }}
+        {% if casereportform.conference.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.conference.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+    
+      
+     <div class="mb-3">
+        <label ><b>Faculty/Subspecialty</b>*</label>
+        {{ casereportform.faculty }}
+{% if casereportform.faculty.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.faculty.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+    <div class="mb-3">
+        <label ><b>Title</b>*</label>
+        {{ casereportform.title }}
+{% if casereportform.title.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.title.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}    </div>
+     <div class="row mb-5">
+       <div class="col-md-4">
+        <label ><b>Presenter's Name</b>*</label>
+        {{ casereportform.presentername }}
+{% if casereportform.presentername.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.presentername.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+       </div>
+        <div class="col-md-4">
+          <label ><b>Presenter's Email</b>*</label>
+        {{ casereportform.presenteremail }}
+{% if casereportform.presenteremail.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.presenteremail.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+        </div>
+         <div class="col-md-4">
+          <label ><b>Presenter's Phone</b>*</label>
+        {{ casereportform.presenterphone }}
+{% if casereportform.presenterphone.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.presenterphone.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+         </div>
+    </div>
+   
+    <div class="mb-5">
+             <label > <b> Author(s)</b> </label>
+            <div class="row mb-5" id="caseauthorholder">
+             <div class="class col-md-3">Fullname *
+              <input type="text" name="fullname[]" required class="form-control"><i>format: firstname initial surname</i>
+             </div>
+  
+             <div class="class col-md-3">Email *
+               <input type="text" name="email[]" type="email" required class="form-control">
+             </div>
+             <div class="class col-md-2">Phone *
+               <input type="text" name="phone[]"  required class="form-control"><i>format:(+ext)phonenumber</i>
+             </div>
+             <div class="class col-md-3">Affiliation *
+               <input type="text"  name="affiliation[]" required class="form-control">
+             </div>
+
+             <!-- button her -->
+                  <div class="col-md-1 d-flex align-items-center">
+                    <button type="button" id="caseaddmore" class="btn btn-primary btn-sm">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+</svg>
+                    </button>
+                  </div>
+             <!-- button ends here -->
+             </div>
+      <script>
+let j = 0;
+
+$('#caseaddmore').on('click', function () {
+  
+    j++;
+
+    $('#caseauthorholder').append(`
+        <div class="row mb-3 mt-4 caseauthor-row">
+
+            <div class="col-md-3">
+                <input type="text" name="fullname[]" class="form-control">
+            </div>
+
+          
+            <div class="col-md-3">
+                <input type="email" name="email[]" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" name="phone[]" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="affiliation[]" class="form-control">
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="button" class="btn btn-danger btn-sm caseremove-row">
+                    ×
+                </button>
+            </div>
+
+        </div>
+    `);
+});
+
+// remove row
+$(document).on('click', '.caseremove-row', function () {
+    $(this).closest('.caseauthor-row').remove();
+});
+</script>
+    </div>
+
+ <div class="mb-3">
+        <label > <b>Case Report</b>*</label>
+        {{ casereportform.casereport }}
+{% if casereportform.casereport.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.casereport.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+ 
+   
+      <div class="mb-3">
+        <label > <b>Keywords</b>*</label>
+        {{ casereportform.keywords }}
+{% if casereportform.keywords.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.keywords.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+
+
+<hr>
+<h4>French Version</h4>
+ <div class="mb-3">
+        <label > <b>Titre/Title</b>*</label>
+        {{ casereportform.frtitle }}
+{% if casereportform.frtitle.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.frtitle.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+
+ <div class="mb-3">
+        <label > <b>Case Report</b>*</label>
+        {{ casereportform.frcasereport }}
+{% if casereportform.frcasereport.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.frcasereport.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+   
+      <div class="mb-3">
+        <label > <b>Mots clés </b>*</label>
+        {{ casereportform.frkeywords }}
+{% if casereportform.frkeywords.errors %}
+    <div class="alert alert-danger">
+        {% for error in casereportform.frkeywords.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+
+
+    <button type="submit" class="btn btn-primary w-100">
+    Submit Case Report
+</button>
+
+
+</form>
+</div>
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+{% endblock  %}

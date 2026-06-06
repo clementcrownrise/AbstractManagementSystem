@@ -1,22 +1,493 @@
 {% extends 'accounts/dashboard.html' %}
-
 {% block content %}
-    {{ form.media }}
+    {{ originalform.media }}
 
+  <h1 class="app-page-title">Submit Original/Review</h1>
 
-  <h1 class="app-page-title">Submit An Abstract</h1>
+       
+
                 <div class="app-card app-card-accordion shadow-sm mb-4">
 				    <div class="app-card-header p-4 pb-2  border-0">
 				    </div><!--//app-card-header-->
 				    <div class="app-card-body p-4 pt-0">
-					  <form method="POST" enctype="multipart/form-data">
+      
+    <hr>
+
+    
+<div id="original">
+<form method="POST" id="originalForm"  ">
     {% csrf_token %}
-    {{ form.as_p|safe }}
-    <button type="submit" class="btn btn-primary w-100">
-    Submit Article
+<h4>English Version</h4>
+<div id="wordWarning" class="alert alert-danger d-none">
+    Maximum word count of 400 exceeded, you will NOT be able to submit your form.
+</div>
+    <input type="hidden" name="abstracttype" value="original">
+
+ <div class="mb-3">
+        <label "><b>Select Conference</b></label>
+        {{ originalform.conference }}
+        {% if originalform.conference.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.conference.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+        </div>
+{% endif %}
+      
+     <div class="mb-3">
+        <label ><b>Faculty/Subspecialty *</b></label>
+        {{ originalform.faculty }}
+         {% if originalform.faculty.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.faculty.errors %}
+            {{ error }}<br>
+        {% endfor %}
+            </div>
+{% endif %}
+    </div>
+    <div class="mb-3">
+        <label ><b>Title *</b></label>
+        {{ originalform.title }}
+ {% if originalform.title.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.title.errors %}
+            {{ error }}<br>
+        {% endfor %}
+        </div>
+{% endif %}
+    </div>
+     <div class="row mb-5">
+       <div class="col-md-4">
+        <label ><b>Presenter's Name *</b></label>
+        {{ originalform.presentername }}
+   {% if originalform.presentername.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.presentername.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+       </div>
+        <div class="col-md-4">
+          <label ><b>Presenter's Email *</b></label>
+        {{ originalform.presenteremail }}
+   {% if originalform.presenteremail.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.presenteremail.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+        </div>
+         <div class="col-md-4">
+          <label ><b>Presenter's Phone *</b></label>
+        {{ originalform.presenterphone }}
+   {% if originalform.presenterphone.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.presenterphone.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+         </div>
+    </div>
+   
+    <div class=" mb-5">
+             <label > <b> Author(s) </b> </label>
+            <div class="row mb-5" id="authorholder">
+             <div class="class col-md-3">Fullname *
+              <input type="text" name="fullname[]" class="form-control"><i>format: firstname initial surname</i>
+             </div>
+  
+             <div class="class col-md-3">Email *
+               <input type="text" name="email[]" class="form-control">
+             </div>
+             <div class="class col-md-2">Phone *
+               <input type="text" name="phone[]" class="form-control"><i>format:(+ext)phonenumber</i>
+             </div>
+             <div class="class col-md-3">Affiliation *
+               <input type="text"  name="affiliation[]" class="form-control">
+             </div>
+
+             <!-- button her -->
+                  <div class="col-md-1 d-flex align-items-center">
+                    <button type="button" id="addmore" class="btn btn-primary btn-sm">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+</svg>
+                    </button>
+                  </div>
+             <!-- button ends here -->
+             </div>
+      <script>
+let i = 0;
+
+$('#addmore').on('click', function () {
+    i++;
+
+    $('#authorholder').append(`
+        <div class="row mb-2 mt-2 author-row">
+
+            <div class="class col-md-3">Fullname
+              <input type="text" name="fullname[]" class="form-control">
+              <i>format: firstname initial surname</i>
+             </div>
+  
+             <div class="class col-md-3">Email
+               <input type="text" name="email[]" class="form-control">
+             </div>
+             <div class="class col-md-2">Phone
+               <input type="text" name="phone[]" class="form-control"><i>format:(+ext)phonenumber</i>
+             </div>
+             <div class="class col-md-3">Affiliation
+               <input type="text"  name="affiliation[]" class="form-control">
+             </div>
+
+
+            <div class="col-md-1 d-flex align-items-center">
+                <button type="button" class="btn btn-danger btn-sm remove-row">
+                    ×
+                </button>
+            </div>
+
+        </div>
+    `);
+});
+
+// remove row
+$(document).on('click', '.remove-row', function () {
+    $(this).closest('.author-row').remove();
+});
+</script>
+    </div>
+
+ <div class="mb-3">
+        <label > <b>Introduction</b> *</label>
+        {{ originalform.introduction }}
+        <small>
+        Words:
+        <span class="box-count">0</span>
+    </small>
+ {% if originalform.introduction.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.introduction.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+     <div class="mb-3">
+        <label > <b>Methods</b> *</label>
+        {{ originalform.methods }}
+        <small>
+        Words:
+        <span class="box-count">0</span>
+    </small>
+   {% if originalform.methods.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.methods.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Results</b> *</label>
+        {{ originalform.results }}
+        <small>
+        Words:
+        <span class="box-count">0</span>
+    </small>
+   {% if originalform.results.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.results.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Conclusion</b> *</label>
+        {{ originalform.conclusion }}
+        <small>
+        Words:
+        <span class="box-count">0</span>
+    </small>
+     {% if originalform.conclusion.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.conclusion.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Limitations</b> *</label>
+        {{ originalform.limitations }}
+        <small>
+        Words:
+        <span class="box-count">0</span>
+    </small>
+ {% if originalform.limitations.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.limitations.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Keywords</b> *</label>
+        {{ originalform.keywords }}
+ {% if originalform.keywords.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.keywords.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+
+
+<style>
+    .wordbox{height: 400px;}
+    .absl{position: fixed; top: 200px; right: 10px;z-index: 10000;}
+</style>
+
+<div class="alert alert-info absl">
+    Total Words Used:
+    <span id="usedwords">0</span>
+    / 400
+    <br>
+
+    Remaining Words:
+    <span id="remaining">400</span>
+</div>
+
+<hr>
+<h4>French Version</h4>
+ <div class="mb-3">
+        <label > <b>Titre/Title</b> *</label>
+        {{ originalform.frtitle }}
+   {% if originalform.frtitle.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frtitle.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+
+ <div class="mb-3">
+        <label > <b>Contexte/Introduction</b> *</label>
+        {{ originalform.frintroduction }}
+     {% if originalform.frintroduction.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frintroduction.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+     <div class="mb-3">
+        <label > <b>Méthodes</b> *</label>
+        {{ originalform.frmethods }}
+     {% if originalform.frmethods.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frmethods.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Résultats</b> *</label>
+        {{ originalform.frresults }}
+   {% if originalform.frresults.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frresults.errors %}
+            {{ error }}<br>
+        {% endfor %}
+    </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Conslusion</b> *</label>
+        {{ originalform.frconclusion }}
+   {% if originalform.frconclusion.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frconclusion.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Limitations</b> *</label>
+        {{ originalform.frlimitations }}
+     {% if originalform.frlimitations.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frlimitations.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+      <div class="mb-3">
+        <label > <b>Mots clés </b> *</label>
+        {{ originalform.frkeywords }}
+       {% if originalform.frkeywords.errors %}
+    <div class="alert alert-danger">
+        {% for error in originalform.frkeywords.errors %}
+            {{ error }}<br>
+        {% endfor %}
+      </div>
+{% endif %}
+    </div>
+
+
+    <button type="submit" id="submitBtn" class="btn btn-primary w-100">
+    Submit Abstract
 </button>
 </form>
+
+</div>
+
+</div>
 				    </div><!--//app-card-body-->
 				</div><!--//app-card-->
+<script>
+$(document).ready(function () {
+
+    const maxWords = 400;
+
+    function countWords(text) {
+        return text.trim()
+            ? text.trim().split(/\s+/).length
+            : 0;
+    }
+
+    function getTotalWords() {
+        let total = 0;
+
+        $('.wordbox').each(function () {
+            total += countWords($(this).val());
+        });
+
+        return total;
+    }
+
+    function updateWordCounts() {
+
+        let totalWords = 0;
+
+        $('.wordbox').each(function (index) {
+
+            const words = countWords($(this).val());
+
+            totalWords += words;
+
+            $('.box-count').eq(index).text(words);
+        });
+
+        $('#usedwords').text(totalWords);
+
+        const remaining = maxWords - totalWords;
+
+        $('#remaining').text(remaining);
+
+        if (totalWords > maxWords) {
+
+            $('#submitBtn').prop('disabled', true);
+
+            $('#remaining').addClass('text-danger');
+
+            $('#wordWarning').removeClass('d-none');
+
+        } else {
+
+            $('#submitBtn').prop('disabled', false);
+
+            $('#remaining').removeClass('text-danger');
+
+            $('#wordWarning').addClass('d-none');
+        }
+
+        return totalWords;
+    }
+
+    // Initial count
+    updateWordCounts();
+
+    // Block typing once 400 words reached
+    $('.wordbox').on('keydown', function (e) {
+
+        const totalWords = getTotalWords();
+
+        const allowedKeys = [
+            'Backspace',
+            'Delete',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            'Tab',
+            'Home',
+            'End'
+        ];
+
+        if (e.ctrlKey || e.metaKey) {
+            return;
+        }
+
+        if (
+            totalWords >= maxWords &&
+            !allowedKeys.includes(e.key)
+        ) {
+            e.preventDefault();
+        }
+    });
+
+    // Update counts while typing
+    $('.wordbox').on('input', function () {
+        updateWordCounts();
+    });
+
+    // Handle pasted content
+    $('.wordbox').on('paste', function () {
+
+        const currentBox = $(this);
+
+        setTimeout(function () {
+
+            let totalWords = getTotalWords();
+
+            if (totalWords > maxWords) {
+
+                let excess = totalWords - maxWords;
+
+                let words = currentBox.val()
+                    .trim()
+                    .split(/\s+/);
+
+                words = words.slice(0, words.length - excess);
+
+                currentBox.val(words.join(' '));
+            }
+
+            updateWordCounts();
+
+        }, 10);
+
+    });
+
+});
+
+//below shows warning -->
+
+
+
+</script>
 
 {% endblock  %}
