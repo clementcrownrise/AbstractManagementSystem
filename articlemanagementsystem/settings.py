@@ -37,10 +37,14 @@ print("SECRET_KEY =", SECRET_KEY)
 DEBUG = True
 
 #ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '*',  # temporary for debugging
+    'wacsabstracts.org',
+]
 
-ALLOWED_HOSTS = [os.environ.get('RAILWAY_PUBLIC_DOMAIN', '*'), '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = [f"https://{os.environ.get('RAILWAY_PUBLIC_DOMAIN')}"]
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://wacsabstracts.org',
+]
 # Application definition
 
 INSTALLED_APPS = [
