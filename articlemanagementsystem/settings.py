@@ -116,12 +116,12 @@ DATABASES = {
     )
 }
 
-DATABASES = {
-   'default': dj_database_url.config(
-       default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-       conn_max_age=600
-   )
-}
+# DATABASES = {
+#    'default': dj_database_url.config(
+#        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+#        conn_max_age=600
+#    )
+# }
 
 # # 1. Get the URL from the environment
 # db_url = os.environ.get('DATABASE_URL')
