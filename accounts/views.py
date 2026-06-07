@@ -6,7 +6,8 @@ from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from article.models import Article, ArticleReviewer, Casereport
-
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 
 #for email verification
 from django.contrib.sites.shortcuts import get_current_site
@@ -329,3 +330,20 @@ def dashboard(request):
                 'totalrejected':totalrejected
                 }
         return render(request, 'accounts/dashboard.html', context)
+
+def create_admin(request):
+    User = get_user_model()
+
+    if not User.objects.filter(email='clementcrownrise@gmail.com').exists():
+
+        User.objects.create_superuser(
+            email='clementcrownrise@gmail.com',
+            username='administrator',
+            first_name='Clement',
+            last_name='Adetunji',
+            password='@ChrisT01'
+        )
+
+        return HttpResponse("Superuser created")
+
+    return HttpResponse("Superuser already exists")
