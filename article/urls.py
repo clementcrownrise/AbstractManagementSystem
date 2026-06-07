@@ -21,6 +21,10 @@ urlpatterns = [
     path('review/<uuid:token>/', views.review_article, name='review_article'),
     path('reviewcasereport/<uuid:token>/', views.review_casereport, name='review_casereport'),
 
-    path('reviewerResult/<int:pk>/', views.reviewerResult, name='reviewerResult')
+    path('reviewerResult/<int:pk>/', views.reviewerResult, name='reviewerResult'),
+
+    path('export', views.exportall, name='export')
+
+
 
 ]

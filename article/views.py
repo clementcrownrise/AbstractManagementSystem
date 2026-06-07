@@ -3,13 +3,15 @@ from .forms import ArticleForm, CasereportForm
 from django.contrib  import messages
 from .models import Article, ArticleReviewer, Comment, Casereport, ReviewerReport
 from accounts.models import Account
+from conference.models import Conference
 from reviewers.models import Reviewer
 from faculty.models import Faculty
-from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from authors.models import Authors
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from docx import Document
 
 
 @login_required
@@ -609,3 +611,106 @@ def remove_reviewercasereport(request, casereport_id, reviewer_id):
     ).delete()  
     messages.error(request, 'The reviewer has been removed succefully')
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def exportall(request):
+    conferences = Conference.objects.all()
+    faculties = Faculty.objects.all()
+
+    if request.method == 'POST':
+        conference  = request.POST.get('conference')
+        faculty = request.POST.get('faculty')
+        status = request.POST.get('status')
+        typ = request.POST.get('typ')
+        document = Document()
+        if typ == 'casereport':
+            casereports = Casereport.objects.filter(abstracttype='casereport',
+                                                    conference_id=conference, 
+                                                    faculty_id = faculty,
+                                                    status = status
+                                                    )
+            for casereport in casereports:
+                document.add_heading(casereport.title, level=1)
+                document.add_paragraph(f'Author:{casereport.user}')
+                document.add_paragraph(f'Presenter Name:{casereport.presentername}')
+                document.add_paragraph(f'Presenter Email:{casereport.presenteremail}')
+                document.add_paragraph(f'Presenter Phone:{casereport.presenterphone}')
+                for author in casereport.authors.all():
+                    document.add_paragraph(
+                        f"{author.fullname }, {author.email }, {author.phone }, ({author.affiliation})"
+                    )
+                document.add_paragraph(f'Case Report:{casereport.casereport}')
+                document.add_paragraph(f'Keywords:{casereport.keywords}')
+
+                document.add_paragraph(f'French Title :{casereport.frtitle}')
+                document.add_paragraph(f'French Casereport:{casereport.frcasereport}')
+                document.add_paragraph(f'French Keywords:{casereport.frkeywords}')
+                document.add_paragraph(f'French Title :{casereport.frtitle}')
+
+                document.add_paragraph(f'Status:{casereport.status}')
+                document.add_paragraph(f'Conference:{casereport.conference}')
+
+                document.add_paragraph(f'Faculty :{casereport.faculty}')
+                document.add_page_break
+            response = HttpResponse(
+                content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
+
+            response['Content-Disposition'] = 'attachment; filename=articles.docx'
+            document.save(response)
+            return response
+        
+        if typ == 'originalreview':
+            articles = Article.objects.filter(abstracttype='original',
+                                                    conference_id=conference, 
+                                                    faculty_id = faculty,
+                                                    status = status
+                                                    )
+            for article in articles:
+                document.add_heading(article.title, level=1)
+                document.add_paragraph(f'Author:{article.user}')
+                document.add_paragraph(f'Presenter Name: {article.presentername}')
+                document.add_paragraph(f'Presenter Email: {article.presenteremail}')
+                document.add_paragraph(f'Presenter Phone: {article.presenterphone}')
+                for author in article.authors.all():
+                    document.add_paragraph(
+                        f"{author.fullname }, {author.email }, {author.phone }, ({author.affiliation})"
+                    )
+                document.add_paragraph(f'Introduction:{article.introduction}')
+                document.add_paragraph(f'Methods: {article.methods}')
+                document.add_paragraph(f'Results: {article.results}')
+                document.add_paragraph(f'Limitations: {article.limitations}')
+                document.add_paragraph(f'Conclusion: {article.conclusion}')
+
+                document.add_paragraph(f'Keywords: {article.keywords}')
+
+                document.add_paragraph(f'French Title : {article.frtitle}')
+                document.add_paragraph(f'French Introduction: {article.frintroduction}')
+                document.add_paragraph(f'French Methods: {article.frmethods}')
+                document.add_paragraph(f'French Results: {article.frresults}')
+                document.add_paragraph(f'French Results: {article.frlimitations}')
+                document.add_paragraph(f'French Conclusion: {article.frconclusion}')
+
+                document.add_paragraph(f'French Keywords: {article.frkeywords}')
+
+                document.add_paragraph(f'Status: {article.status}')
+                document.add_paragraph(f'Conference: {article.conference}')
+
+                document.add_paragraph(f'Faculty : {article.faculty}')
+                document.add_page_break
+            response = HttpResponse(
+                content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
+
+            response['Content-Disposition'] = 'attachment; filename=articles.docx'
+            document.save(response)
+            return response
+
+
+    context = {'conferences':conferences,
+               'faculties':faculties
+               }
+    return render(request, 'article/export.html',context)
+
+

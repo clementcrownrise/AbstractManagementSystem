@@ -1,0 +1,91 @@
+{% load static %}
+
+{% include 'includes/topbar.html' %}
+	
+       {% include 'includes/sidebar.html' %}
+    </header><!--//app-header-->
+    
+    <div class="app-wrapper">
+	    
+	    <div class="app-content pt-3 p-md-3 p-lg-4">
+		    <div class="container-xl">
+			    
+			   
+			
+		{% block content %}
+				    {% include 'includes/alerts.html' %}
+
+                  <h4>Export</h4>
+				<div class="app-card app-card-accordion shadow-sm mb-4">
+					
+				    <div class="app-card-header p-4 pb-2  border-0">
+						<form action="" method="POST">
+                            {% csrf_token %}
+                             <table>
+                            <tr>
+                                <td><label for="Conference">Conference</label>
+                                    <select name="conference" id="" required class="form-control">
+                                            <option value="" selected>-Select a Conference-</option>
+                                            {% for conference in conferences %}
+                                            <option value="{{ conference.id }}">{{ conference.name}}</option>
+                                            {% endfor %}
+                                    </select>
+                                </td>
+                                  <td>
+                                    <label for="Faculty">Faculty</label>
+                                    <select name="faculty" id="" required class="form-control">
+                                            <option value="" selected>-Select a Faculty-</option>
+                                            {% for faculty in faculties %}
+                                            <option value="{{ faculty.id }}">{{ faculty.faculty_name}}</option>
+                                            {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <label for="Faculty">Type</label>
+                                    <select name="typ" id="" required class="form-control">
+                                            <option value="" selected>-Select Type-</option>
+                                           
+                                            <option value="casereport">Case Report</option>
+                                            <option value="originalreview">Original/Review</option>
+                                           
+                                    </select>
+                                </td>
+                                 <td>
+                                    <label for="stat">Status</label>
+                                        <select name="status" id="" class="form-control" required>
+                                            <option value="" selected>Select</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Accepted">Accepted</option>
+                                            <option value="Rejected">Rejected</option>
+                                            <option value="Accepted as Poster">Accepted as Poster</option>
+                                             <option value="Accepted as Podium">Accepted as Podium</option>
+
+                                        </select>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary form-control">Export</button>
+                                </td>
+                            </tr>
+                         </table>
+                        </form>
+				    </div><!--//app-card-header-->
+					
+				    <div class="app-card-body p-4 pt-0">
+						
+               
+						
+				    </div><!--//app-card-body-->
+				</div><!--//app-card-->
+
+ 
+    
+            
+
+       
+                	 
+
+
+							
+        {% endblock  %}
+		  {% include 'includes/footer.html' %}
+
