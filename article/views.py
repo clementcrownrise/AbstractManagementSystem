@@ -50,22 +50,21 @@ def create_casereport(request):
             to_email = set()
             to_email.add('clementcrownrise@gmail.com')
             to_email.add('wacs.scicom@gmail.com')
-            to_email = casereport.user.email
+            to_email.add(casereport.user.email) 
             message = render_to_string('article/abstractSubmissionEmail.html',{
                 'casereport':casereport,
             })
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email = EmailMessage(mail_subject, message, to=list(to_email))
             send_email.content_subtype='html'
             send_email.send()
            #i will send to admin below 
             to_emailadmin = set()
             to_emailadmin.add('clementcrownrise@gmail.com')
             to_emailadmin.add('wacs.scicom@gmail.com')
-            to_emailadmin = casereport.user.email
             messageadmin = render_to_string('article/abstractSubmissionEmailFacultyHead.html',{
                 'casereport':casereport,
             })
-            send_emailadmin = EmailMessage(mail_subject, messageadmin, to=[to_emailadmin])
+            send_emailadmin = EmailMessage(mail_subject, messageadmin, to=list(to_emailadmin))
             send_emailadmin.content_subtype='html'
             send_emailadmin.send()
 
@@ -131,11 +130,11 @@ def create_abstract(request):
                 to_email = set()
                 to_email.add('clementcrownrise@gmail.com')
                 to_email.add('wacs.scicom@gmail.com')
-                to_email = article.user.email
+                to_email.add(article.user.email)
                 message = render_to_string('article/abstractSubmissionEmail.html',{
                 'article':article,
                      })
-                send_email = EmailMessage(mail_subject, message, to=[to_email])
+                send_email = EmailMessage(mail_subject, message, to=list(to_email))
                 send_email.content_subtype='html'
                 send_email.send()
 
@@ -144,11 +143,10 @@ def create_abstract(request):
                 to_emailadmin = set()
                 to_emailadmin.add('clementcrownrise@gmail.com')
                 to_emailadmin.add('wacs.scicom@gmail.com')
-                to_emailadmin = article.user.email
                 messageadmin = render_to_string('article/abstractSubmissionEmailFacultyHead.html',{
                     'article':article,
                 })
-                send_emailadmin = EmailMessage(mail_subject, messageadmin, to=[to_emailadmin])
+                send_emailadmin = EmailMessage(mail_subject, messageadmin, to=list(to_emailadmin))
                 send_emailadmin.content_subtype='html'
                 send_emailadmin.send()
 
@@ -298,7 +296,7 @@ def assign_reviewer(request,pk):
                 'review_link':review_link
             })
             to_email = assignment.reviewer.email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email = EmailMessage(mail_subject, message, to=list(to_email))
             send_email.content_subtype= 'html'
             send_email.send()
         
@@ -343,7 +341,7 @@ def casereportassign_reviewer(request,pk):
                 'review_link':review_link
             })
             to_email = assignment.reviewer.email
-            send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email = EmailMessage(mail_subject, message, to=list(to_email))
             send_email.content_subtype = 'html'
             send_email.send()
         
