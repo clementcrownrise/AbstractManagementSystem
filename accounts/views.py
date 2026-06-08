@@ -191,6 +191,7 @@ def forgotPassword(request):
             })
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
+            send_email.content_subtype = 'html'
             send_email.send()
 
             messages.success(request, 'Password reset link has been sent to your email box')
@@ -238,7 +239,7 @@ def resetPassword(request):
             messages.error(request, 'Passwords do not match!')
             return redirect('resetPassword')
     else:
-        return render(request, 'accounts/resetPassword.html')
+        return render(request, 'accounts/resetPasswordpage.html')
     
 
 
