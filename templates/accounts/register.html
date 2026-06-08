@@ -30,32 +30,69 @@
                         <img class="logo-icon me-2" width="300"
                          src="{% static 'images/wacslogo.png' %}" alt="logo"></a></div>
 					<h2 class="auth-heading text-center mb-4">Register </h2>					
-	
+	{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endfor %}
+{% endif %}
 					<div class="auth-form-container text-start mx-auto">
 						<form  action="{% url 'register' %}" class="auth-form auth-signup-form" method="POST">
                             {% include 'includes/alerts.html' %}
                             {% csrf_token %}         
 							<div class="email mb-3">
 								<label class="sr-only" for="signup-email">First Name</label>
-								<input id="signup-name" name="first_name" type="text" class="form-control
-                                 signup-name" placeholder="Full name" required="required">
+								<input id="signup-name" name="first_name" type="text"
+								 class="form-control
+                                 signup-name" placeholder="Full name"
+								  required="required"
+								  value="{{ form.first_name.value|default:'' }}"
+								  >
+								  {% if form.first_name.errors %}
+        <div class="text-danger mt-1">
+            {{ form.first_name.errors }}
+        </div>
+    {% endif %}
 							</div>
                             <div class="email mb-3">
 								<label class="sr-only" for="signup-email">Last Name</label>
 								<input id="signup-name" name="last_name" type="text" 
-                                class="form-control signup-name" placeholder="Last name" required="required">
+                                class="form-control signup-name" placeholder="Last name" 
+								required="required"
+								value="{{ form.last_name.value|default:'' }}"
+								>
+							 {% if form.last_name.errors %}
+        <div class="text-danger mt-1">
+            {{ form.last_name.errors }}
+        </div>
+    {% endif %}
 							</div>
 							<div class="email mb-3">
 								<label class="sr-only" for="signup-email">Your Email</label>
 								<input id="signup-email" name="email" 
                                 type="email" class="form-control signup-email" 
-                                placeholder="Email" required="required">
+                                placeholder="Email" required="required"
+								value="{{ form.email.value|default:'' }}"
+								>
+								 {% if form.email.errors %}
+        <div class="text-danger mt-1">
+            {{ form.email.errors }}
+        </div>
+    {% endif %}
 							</div>
                             <div class="email mb-3">
 								<label class="sr-only" for="signup-email">Phone Number</label>
 								<input id="signup-email" name="phone_number" 
                                 class="form-control signup-email" 
-                                placeholder="Phone Number" required="required">
+                                placeholder="Phone Number" required="required"
+								value="{{ form.phone_number.value|default:'' }}"
+								>
+								 {% if form.phone_number.errors %}
+        <div class="text-danger mt-1">
+            {{ form.phone_number.errors }}
+        </div>
+    {% endif %}
 							</div>
                               <div class="email mb-3">
 								<label class="sr-only" for="signup-email">Faculty</label>
@@ -72,11 +109,21 @@
 							<div class="password mb-3">
 								<label class="sr-only" for="signup-password">Password</label>
 								<input id="signup-password" name="password" type="password" class="form-control signup-password" placeholder="Create a password" required="required">
+							 {% if form.password.errors %}
+        <div class="text-danger mt-1">
+            {{ form.password.errors }}
+        </div>
+    {% endif %}
 							</div>
                             <div class="password mb-3">
 								<label class="sr-only" for="signup-password">Confirm Password</label>
 								<input id="signup-password" name="confirm_password" type="password" 
                                 class="form-control signup-password" placeholder="Confirm password" required="required">
+							 {% if form.confirm_password.errors %}
+        <div class="text-danger mt-1">
+            {{ form.confirm_password.errors }}
+        </div>
+    {% endif %}
 							</div>
 						
 							

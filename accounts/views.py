@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from article.models import Article, ArticleReviewer, Casereport
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 
 #for email verification
 from django.contrib.sites.shortcuts import get_current_site
@@ -65,7 +66,7 @@ def register(request):
             #I will need to send account creation email here later
 
         else:
-            print('form is not valid')
+            #print('form is not valid')
             messages.error(request, 'Error Creating your account, Please try again')
             
     else:

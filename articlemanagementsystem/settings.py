@@ -115,13 +115,43 @@ AUTH_USER_MODEL = 'accounts.Account'
 #    }
 #}
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
-    )
-}
+if os.environ.get('DATABASE_URL'):
+     # Production (Railway)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 
+
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+    SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = 587
+
+    EMAIL_USE_TLS = True   # MUST be True for 587/2525
+    EMAIL_USE_SSL = False  # MUST be False
+
+else:
+    # Local Development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+    EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+    EMAIL_HOST_USER = '8c406525ffd3ad'
+    EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
+    EMAIL_PORT = '2525'
 # DATABASES = {
 #    'default': dj_database_url.config(
 #        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
@@ -129,23 +159,15 @@ DATABASES = {
 #    )
 # }
 
-# # 1. Get the URL from the environment
-# db_url = os.environ.get('DATABASE_URL')
-
-# # 2. Configure the database
 # DATABASES = {
 #     'default': dj_database_url.config(
-#         default=db_url,
-#         conn_max_age=600,
-#         ssl_require=True
+#         default=os.environ.get('DATABASE_URL')
 #     )
 # }
 
-# # 3. Double-check if the URL was actually found
-# if not DATABASES['default'].get('NAME'):
-#     # This is a fallback for local development if the URL is missing
-#     print("WARNING: DATABASE_URL not found. Check your environment variables.")
 
+
+# db_url = os.environ.get('DATABASE_URL')
 
 
 # Password validation
@@ -195,22 +217,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
 
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_HOST_USER = '8c406525ffd3ad'
-# EMAIL_HOST_PASSWORD = '9fd4396d7c0752'
-# EMAIL_PORT = '2525'
 
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
-SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-
-EMAIL_USE_TLS = True   # MUST be True for 587/2525
-EMAIL_USE_SSL = False  # MUST be False
 
 
 
