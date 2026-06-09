@@ -296,7 +296,8 @@ def assign_reviewer(request,pk):
                 'review_link':review_link
             })
             to_email = assignment.reviewer.email
-            send_email = EmailMessage(mail_subject, message, to=list(to_email))
+            print(to_email)
+            send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.content_subtype= 'html'
             send_email.send()
         
@@ -341,7 +342,7 @@ def casereportassign_reviewer(request,pk):
                 'review_link':review_link
             })
             to_email = assignment.reviewer.email
-            send_email = EmailMessage(mail_subject, message, to=list(to_email))
+            send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.content_subtype = 'html'
             send_email.send()
         
