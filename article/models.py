@@ -103,8 +103,8 @@ class Comment(models.Model):
 
 
 class ReviewerReport(models.Model):
-    article = models.ForeignKey(Article, blank=True, null=True, on_delete=models.CASCADE )
-    casereport = models.ForeignKey(Casereport, blank=True, null=True, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, blank=True, null=True, on_delete=models.CASCADE,related_name='reviewer_reports' )
+    casereport = models.ForeignKey(Casereport, blank=True, null=True, on_delete=models.CASCADE, related_name='reviewer_reports')
     reviewer = models.ForeignKey(Reviewer, on_delete=models.CASCADE)
     titlescore = models.DecimalField( max_digits=3,
     decimal_places=1)

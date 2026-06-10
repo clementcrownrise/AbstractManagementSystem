@@ -83,8 +83,8 @@ def create_casereport(request):
 @login_required
 def facultylisting(request, pk):
     faculty = get_object_or_404(Faculty, pk=pk)
-    articles = Article.objects.filter(faculty = faculty )
-    casereports = Casereport.objects.filter(faculty=faculty)
+    articles = Article.objects.filter(faculty = faculty).prefetch_related('reviewer_reports')
+    casereports = Casereport.objects.filter(faculty=faculty).prefetch_related('reviewer_reports')
 
     context ={'faculty':faculty,
               'articles':articles,

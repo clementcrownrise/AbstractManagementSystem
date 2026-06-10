@@ -57,6 +57,8 @@
 												<th class="cell">Title</th>
 												<th class="cell">Conference</th>
 												<th class="cell">Date Submmited</th>
+											<th class="cell">Score </th>
+
 												<th class="cell">Status</th>
 																				
 												<th class="cell"></th>
@@ -72,6 +74,11 @@
 												<td class="cell">{{ article.title  }}</td>
 												<td class="cell">{{ article.conference}}</td>
 												<td class="cell"> {{ article.submitted_at }}</td>
+												<td class="cell"> 
+													{% for report in article.reviewer_reports.all %}
+														<p>{{ report.totalscore }}</p>
+													{% endfor %}
+												</td>
 												<td class="cell">
 													{% if article.status == 'Pending' %}
 													<span class="badge bg-secondary">
@@ -131,6 +138,7 @@
 												<th class="cell">Title</th>
 												<th class="cell">Conference</th>
 												<th class="cell">Date Submmited</th>
+												<th class="cell">Score</th>
 												<th class="cell">Status</th>
 																				
 												<th class="cell"></th>
@@ -146,6 +154,12 @@
 												<td class="cell">{{ casereport.title  }}</td>
 												<td class="cell">{{ casereport.conference}}</td>
 												<td class="cell"> {{ casereport.submitted_at }}</td>
+												<td class="cell"> 
+													{% for report in casereport.reviewer_reports.all %}
+														<p>{{ report.totalscore }}</p>
+													{% endfor %}
+												</td>
+
 												<td class="cell">
 													{% if casereport.status == 'Pending' %}
 													<span class="badge bg-secondary">
