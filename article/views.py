@@ -50,6 +50,7 @@ def create_casereport(request):
             to_email = set()
             to_email.add('clementcrownrise@gmail.com')
             to_email.add('wacs.scicom@gmail.com')
+            to_email.add('eaameh@gmail.com')
             to_email.add(casereport.user.email) 
             message = render_to_string('article/abstractSubmissionEmail.html',{
                 'casereport':casereport,
@@ -60,6 +61,7 @@ def create_casereport(request):
            #i will send to admin below 
             to_emailadmin = set()
             to_emailadmin.add('clementcrownrise@gmail.com')
+            to_emailadmin.add('eaameh@gmail.com')
             to_emailadmin.add('wacs.scicom@gmail.com')
             messageadmin = render_to_string('article/abstractSubmissionEmailFacultyHead.html',{
                 'casereport':casereport,
