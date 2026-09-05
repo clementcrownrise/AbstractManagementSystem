@@ -132,6 +132,7 @@ def create_abstract(request):
                 to_email = set()
                 to_email.add('clementcrownrise@gmail.com')
                 to_email.add('wacs.scicom@gmail.com')
+                to_email.add('eaameh@gmail.com')
                 to_email.add(article.user.email)
                 message = render_to_string('article/abstractSubmissionEmail.html',{
                 'article':article,
@@ -144,6 +145,7 @@ def create_abstract(request):
                 #i will send to admin below 
                 to_emailadmin = set()
                 to_emailadmin.add('clementcrownrise@gmail.com')
+                to_emailadmin.add('eaameh@gmail.com')
                 to_emailadmin.add('wacs.scicom@gmail.com')
                 messageadmin = render_to_string('article/abstractSubmissionEmailFacultyHead.html',{
                     'article':article,
@@ -478,6 +480,7 @@ def reviewerResult(request, pk):
                 emails =set()
                 emails.add(casereport.user.email)
                 emails.add('clementcrownrise@gmail.com')
+                emails.add('eaameh@gmail.com')
                 emails.add('wacs.scicom@gmail.com')
                 #candidate's email
                 send_email = EmailMessage(mail_subject, message, to=list(emails))
@@ -531,6 +534,7 @@ def reviewerResult(request, pk):
                 emails =set()
                 emails.add(article.user.email)
                 emails.add('clementcrownrise@gmail.com')
+                emails.add('eaameh@gmail.com')               
                 emails.add('wacs.scicom@gmail.com')
                 #candidate's email
                 send_email = EmailMessage(mail_subject, message, to=list(emails))
