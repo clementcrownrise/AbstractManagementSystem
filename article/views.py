@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from docx import Document
 
 
+
 @login_required
 def create_casereport(request):
     if request.method == 'POST':
@@ -431,121 +432,278 @@ def admin_comment(request,pk):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-def reviewerResult(request, pk):
-    #print('I am about to add result here')
+# def reviewerResult(request, pk):
+#     #print('I am about to add result here')
     
-    article = Article.objects.get(id=pk)
-    casereport = Casereport.objects.get(id=pk)
+#     article = Article.objects.get(id=pk)
+#     casereport = Casereport.objects.get(id=pk)
+#     if request.method == 'POST':
+
+#         formtype = request.POST.get('formtype')
+#         if formtype == 'casereport':
+#             token = request.POST.get('token')
+#             reviewer = request.POST.get('reviewer_id')
+#             #print(reviewer)
+#             titlescore = request.POST.get('titlescore')
+#             introductionscore = request.POST.get('introductionscore')
+#             resultscore = request.POST.get('resultscore')
+#             conclusionscore = request.POST.get('conclusionscore')
+#             overallscore = request.POST.get('overallscore')
+#             totalscore = request.POST.get('totalscore')
+#             comments = request.POST.get('comment')
+#             #i need to check for existing record before saving
+#             existingResult = ReviewerReport.objects.filter(
+#                 reviewer_id=reviewer,casereport_id = casereport.id) 
+#             if existingResult:
+#                 messages.error(request, 
+#                             'Messages could not be saved you already provided report for this abstract')
+#             else:
+#                 saved_result = ReviewerReport.objects.create(
+#                     reviewer_id = reviewer,
+#                     casereport_id = casereport.id,
+#                     titlescore = titlescore,
+#                     introductionscore = introductionscore,
+#                     methodscore = 0,
+#                     resultscore = resultscore,
+#                     conclusionscore = conclusionscore,
+#                     totalscore = totalscore,
+#                     overallscore = overallscore,
+#                     comments = comments
+#                 )
+#             if saved_result:
+#                 #I need to send a mail to all the users in this article
+
+#                 mail_subject = 'Abstract Update Notification'
+#                 message = render_to_string('article/commentNotification.html',{
+#                     'casereport':casereport,
+#                     'article':article
+#                 })
+#                 emails =set()
+#                 emails.add(casereport.user.email)
+#                 emails.add('clementcrownrise@gmail.com')
+#                 emails.add('eaameh@gmail.com')
+#                 emails.add('wacs.scicom@gmail.com')
+#                 #candidate's email
+#                 send_email = EmailMessage(mail_subject, message, to=list(emails))
+#                 #print(emails)
+#                 send_email.send()
+
+#                 messages.success(request, 'Your comment was saved successfully')
+#             else:
+#                 messages.error(request, 'Messages could not be saved')           
+
+#         elif formtype == 'article':
+
+#             token = request.POST.get('token')
+#             reviewer = request.POST.get('reviewer_id')
+#             #print(reviewer)
+#             titlescore = request.POST.get('titlescore')
+#             introductionscore = request.POST.get('introductionscore')
+#             methodscore = request.POST.get('methodscore')
+#             resultscore = request.POST.get('resultscore')
+#             conclusionscore = request.POST.get('conclusionscore')
+#             overallscore = request.POST.get('overallscore')
+#             totalscore = request.POST.get('totalscore')
+#             comments = request.POST.get('comment')
+#             #i need to check for existing record before saving
+#             existingResult = ReviewerReport.objects.filter(
+#                 reviewer_id=reviewer,article_id = article.id)
+#             if existingResult:
+#                 messages.error(request, 
+#                             'Messages could not be saved you already provided report for this abstract')
+#             else:
+#                 saved_result = ReviewerReport.objects.create(
+#                     reviewer_id = reviewer,
+#                     article_id = article.id,
+#                     titlescore = titlescore,
+#                     introductionscore = introductionscore,
+#                     methodscore = methodscore,
+#                     resultscore = resultscore,
+#                     conclusionscore = conclusionscore,
+#                     totalscore = totalscore,
+#                     overallscore = overallscore,
+#                     comments = comments
+#                 )
+#             if saved_result:
+#                 #I need to send a mail to all the users in this article
+
+#                 mail_subject = 'Abstract Update Notification'
+#                 message = render_to_string('article/commentNotification.html',{
+#                     'casereport':casereport,
+#                     'article':article
+#                 })
+#                 emails =set()
+#                 emails.add(article.user.email)
+#                 emails.add('clementcrownrise@gmail.com')
+#                 emails.add('eaameh@gmail.com')               
+#                 emails.add('wacs.scicom@gmail.com')
+#                 #candidate's email
+#                 send_email = EmailMessage(mail_subject, message, to=list(emails))
+#                 #print(emails)
+#                 send_email.send()
+
+#                 messages.success(request, 'Your comment was saved successfully')
+#             else:
+#                 messages.error(request, 'Messages could not be saved')
+
+#     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def reviewerResult(request, pk):
+
     if request.method == 'POST':
 
         formtype = request.POST.get('formtype')
+        reviewer = request.POST.get('reviewer_id')
+
+        # Common form fields
+        titlescore = request.POST.get('titlescore')
+        introductionscore = request.POST.get('introductionscore')
+        resultscore = request.POST.get('resultscore')
+        conclusionscore = request.POST.get('conclusionscore')
+        overallscore = request.POST.get('overallscore')
+        totalscore = request.POST.get('totalscore')
+        comments = request.POST.get('comment')
+
+        # --------------------------------------------------
+        # CASE REPORT REVIEW
+        # --------------------------------------------------
         if formtype == 'casereport':
-            token = request.POST.get('token')
-            reviewer = request.POST.get('reviewer_id')
-            #print(reviewer)
-            titlescore = request.POST.get('titlescore')
-            introductionscore = request.POST.get('introductionscore')
-            resultscore = request.POST.get('resultscore')
-            conclusionscore = request.POST.get('conclusionscore')
-            overallscore = request.POST.get('overallscore')
-            totalscore = request.POST.get('totalscore')
-            comments = request.POST.get('comment')
-            #i need to check for existing record before saving
-            existingResult = ReviewerReport.objects.filter(
-                reviewer_id=reviewer,casereport_id = casereport.id) 
-            if existingResult:
-                messages.error(request, 
-                            'Messages could not be saved you already provided report for this abstract')
-            else:
-                saved_result = ReviewerReport.objects.create(
-                    reviewer_id = reviewer,
-                    casereport_id = casereport.id,
-                    titlescore = titlescore,
-                    introductionscore = introductionscore,
-                    methodscore = 0,
-                    resultscore = resultscore,
-                    conclusionscore = conclusionscore,
-                    totalscore = totalscore,
-                    overallscore = overallscore,
-                    comments = comments
+
+            # Retrieve only the Case Report
+            casereport = get_object_or_404(Casereport, pk=pk)
+
+            # Check whether this reviewer has already submitted
+            existing_result = ReviewerReport.objects.filter(
+                reviewer_id=reviewer,
+                casereport_id=casereport.id
+            ).exists()
+
+            if existing_result:
+                messages.error(
+                    request,
+                    'You have already submitted a report for this abstract.'
                 )
-            if saved_result:
-                #I need to send a mail to all the users in this article
 
-                mail_subject = 'Abstract Update Notification'
-                message = render_to_string('article/commentNotification.html',{
-                    'casereport':casereport,
-                    'article':article
-                })
-                emails =set()
-                emails.add(casereport.user.email)
-                emails.add('clementcrownrise@gmail.com')
-                emails.add('eaameh@gmail.com')
-                emails.add('wacs.scicom@gmail.com')
-                #candidate's email
-                send_email = EmailMessage(mail_subject, message, to=list(emails))
-                #print(emails)
-                send_email.send()
-
-                messages.success(request, 'Your comment was saved successfully')
             else:
-                messages.error(request, 'Messages could not be saved')           
+                ReviewerReport.objects.create(
+                    reviewer_id=reviewer,
+                    casereport_id=casereport.id,
+                    titlescore=titlescore,
+                    introductionscore=introductionscore,
+                    methodscore=0,
+                    resultscore=resultscore,
+                    conclusionscore=conclusionscore,
+                    totalscore=totalscore,
+                    overallscore=overallscore,
+                    comments=comments
+                )
 
+                # Send notification after successful creation
+                mail_subject = 'Abstract Update Notification'
+
+                message = render_to_string(
+                    'article/commentNotification.html',
+                    {
+                        'casereport': casereport,
+                    }
+                )
+
+                emails = {
+                    casereport.user.email,
+                    'clementcrownrise@gmail.com',
+                    'eaameh@gmail.com',
+                    'wacs.scicom@gmail.com',
+                }
+
+                emails.discard('')
+
+                email = EmailMessage(
+                    mail_subject,
+                    message,
+                    to=list(emails)
+                )
+                email.send()
+
+                messages.success(
+                    request,
+                    'Your comment was saved successfully.'
+                )
+
+        # --------------------------------------------------
+        # ARTICLE REVIEW
+        # --------------------------------------------------
         elif formtype == 'article':
 
-            token = request.POST.get('token')
-            reviewer = request.POST.get('reviewer_id')
-            #print(reviewer)
-            titlescore = request.POST.get('titlescore')
-            introductionscore = request.POST.get('introductionscore')
+            # Retrieve only the Article
+            article = get_object_or_404(Article, pk=pk)
+
             methodscore = request.POST.get('methodscore')
-            resultscore = request.POST.get('resultscore')
-            conclusionscore = request.POST.get('conclusionscore')
-            overallscore = request.POST.get('overallscore')
-            totalscore = request.POST.get('totalscore')
-            comments = request.POST.get('comment')
-            #i need to check for existing record before saving
-            existingResult = ReviewerReport.objects.filter(
-                reviewer_id=reviewer,article_id = article.id)
-            if existingResult:
-                messages.error(request, 
-                            'Messages could not be saved you already provided report for this abstract')
-            else:
-                saved_result = ReviewerReport.objects.create(
-                    reviewer_id = reviewer,
-                    article_id = article.id,
-                    titlescore = titlescore,
-                    introductionscore = introductionscore,
-                    methodscore = methodscore,
-                    resultscore = resultscore,
-                    conclusionscore = conclusionscore,
-                    totalscore = totalscore,
-                    overallscore = overallscore,
-                    comments = comments
+
+            # Check whether this reviewer has already submitted
+            existing_result = ReviewerReport.objects.filter(
+                reviewer_id=reviewer,
+                article_id=article.id
+            ).exists()
+
+            if existing_result:
+                messages.error(
+                    request,
+                    'You have already submitted a report for this abstract.'
                 )
-            if saved_result:
-                #I need to send a mail to all the users in this article
 
-                mail_subject = 'Abstract Update Notification'
-                message = render_to_string('article/commentNotification.html',{
-                    'casereport':casereport,
-                    'article':article
-                })
-                emails =set()
-                emails.add(article.user.email)
-                emails.add('clementcrownrise@gmail.com')
-                emails.add('eaameh@gmail.com')               
-                emails.add('wacs.scicom@gmail.com')
-                #candidate's email
-                send_email = EmailMessage(mail_subject, message, to=list(emails))
-                #print(emails)
-                send_email.send()
-
-                messages.success(request, 'Your comment was saved successfully')
             else:
-                messages.error(request, 'Messages could not be saved')
+                ReviewerReport.objects.create(
+                    reviewer_id=reviewer,
+                    article_id=article.id,
+                    titlescore=titlescore,
+                    introductionscore=introductionscore,
+                    methodscore=methodscore,
+                    resultscore=resultscore,
+                    conclusionscore=conclusionscore,
+                    totalscore=totalscore,
+                    overallscore=overallscore,
+                    comments=comments
+                )
+
+                # Send notification after successful creation
+                mail_subject = 'Abstract Update Notification'
+
+                message = render_to_string(
+                    'article/commentNotification.html',
+                    {
+                        'article': article,
+                    }
+                )
+
+                emails = {
+                    article.user.email,
+                    'clementcrownrise@gmail.com',
+                    'eaameh@gmail.com',
+                    'wacs.scicom@gmail.com',
+                }
+
+                emails.discard('')
+
+                email = EmailMessage(
+                    mail_subject,
+                    message,
+                    to=list(emails)
+                )
+                email.send()
+
+                messages.success(
+                    request,
+                    'Your comment was saved successfully.'
+                )
+
+        else:
+            messages.error(
+                request,
+                'Invalid review form type.'
+            )
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 #adminComment
 @login_required
