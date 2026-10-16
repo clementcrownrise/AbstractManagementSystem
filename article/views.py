@@ -90,22 +90,24 @@ def create_casereport(request):
 def facultylisting(request, pk):
     faculty = get_object_or_404(Faculty, pk=pk)
     #articles = Article.objects.filter(faculty = faculty).prefetch_related('reviewer_reports')
-    articles = Article.objects.annotate(
-        has_reviewer=Exists(
-            ArticleReviewer.objects.filter(
-                article_id=OuterRef('pk')
-            )
+    articles = Article.objects.filter(
+    faculty=faculty
+     ).annotate(
+    has_reviewer=Exists(
+        ArticleReviewer.objects.filter(
+            article_id=OuterRef('pk')
         )
-    )
-    #casereports = Casereport.objects.filter(faculty=faculty).prefetch_related('reviewer_reports')
+    )).prefetch_related('reviewer_reports')
 
-    casereports = Casereport.objects.annotate(
-        has_reviewer=Exists(
-            ArticleReviewer.objects.filter(
-                casereport_id=OuterRef('pk')
+    casereports = Casereport.objects.filter(
+        faculty=faculty).annotate(
+      has_reviewer=Exists(
+                ArticleReviewer.objects.filter(
+                    casereport_id=OuterRef('pk')
+                )
             )
-        )
-    )
+     ).prefetch_related('reviewer_reports')
+
 
     context ={'faculty':faculty,
               'articles':articles,
