@@ -56,6 +56,7 @@
 												
 												<th class="cell">Title</th>
 												<th class="cell">Conference</th>
+												<th class="cell">Assignment Status</th>
 												<th class="cell">Date Submmited</th>
 											<th class="cell">Score </th>
 
@@ -73,6 +74,15 @@
 												
 												<td class="cell">{{ article.title  }}</td>
 												<td class="cell">{{ article.conference}}</td>
+												
+												<td>
+													{% if article.has_reviewer %}
+														<span class="badge bg-success">Assigned</span>
+													{% else %}
+														<span class="badge bg-warning text-dark">Not Assigned</span>
+													{% endif %}
+												</td>
+
 												<td class="cell"> {{ article.submitted_at }}</td>
 												<td class="cell"> 
 													{% for report in article.reviewer_reports.all %}
@@ -137,6 +147,7 @@
 												
 												<th class="cell">Title</th>
 												<th class="cell">Conference</th>
+												<th class="cell">Assignment Status</th>
 												<th class="cell">Date Submmited</th>
 												<th class="cell">Score</th>
 												<th class="cell">Status</th>
@@ -153,6 +164,13 @@
 												
 												<td class="cell">{{ casereport.title  }}</td>
 												<td class="cell">{{ casereport.conference}}</td>
+												<td>
+													{% if casereport.has_reviewer %}
+														<span class="badge bg-success">Assigned</span>
+													{% else %}
+														<span class="badge bg-warning text-dark">Not Assigned</span>
+													{% endif %}
+												</td>
 												<td class="cell"> {{ casereport.submitted_at }}</td>
 												<td class="cell"> 
 													{% for report in casereport.reviewer_reports.all %}

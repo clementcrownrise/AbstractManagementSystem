@@ -74,8 +74,10 @@ class Article(models.Model):
 
 
 class ArticleReviewer(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True )
-    casereport = models.ForeignKey(Casereport, on_delete=models.CASCADE, null=True, blank=True )
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True,
+                                related_name='reviewer_assignments' )
+    casereport = models.ForeignKey(Casereport, on_delete=models.CASCADE, null=True, blank=True,
+                                   related_name='reviewer_assignments' )
     reviewer = models.ForeignKey(Reviewer, on_delete=models.CASCADE)
     token = models.UUIDField(default=uuid.uuid4, unique=True)
     reviewed = models.BooleanField(default=False)

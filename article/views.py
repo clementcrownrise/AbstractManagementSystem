@@ -12,6 +12,9 @@ from authors.models import Authors
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from docx import Document
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+from django.db.models import Exists, OuterRef 
 
 
 
@@ -86,8 +89,23 @@ def create_casereport(request):
 @login_required
 def facultylisting(request, pk):
     faculty = get_object_or_404(Faculty, pk=pk)
-    articles = Article.objects.filter(faculty = faculty).prefetch_related('reviewer_reports')
-    casereports = Casereport.objects.filter(faculty=faculty).prefetch_related('reviewer_reports')
+    #articles = Article.objects.filter(faculty = faculty).prefetch_related('reviewer_reports')
+    articles = Article.objects.annotate(
+        has_reviewer=Exists(
+            ArticleReviewer.objects.filter(
+                article_id=OuterRef('pk')
+            )
+        )
+    )
+    #casereports = Casereport.objects.filter(faculty=faculty).prefetch_related('reviewer_reports')
+
+    casereports = Casereport.objects.annotate(
+        has_reviewer=Exists(
+            ArticleReviewer.objects.filter(
+                casereport_id=OuterRef('pk')
+            )
+        )
+    )
 
     context ={'faculty':faculty,
               'articles':articles,
