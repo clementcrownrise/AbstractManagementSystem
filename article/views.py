@@ -705,6 +705,7 @@ def reviewerResult(request, pk):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
+
 #adminComment
 @login_required
 def admin_casereportcomment(request,pk):
