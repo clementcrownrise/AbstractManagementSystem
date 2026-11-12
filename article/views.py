@@ -411,6 +411,23 @@ def admin_comment(request,pk):
         #print('I am getting here as casereport')
         status = request.POST.get('status')
         article.status= request.POST.get('status')
+        if article.status == 'Accepted as Poster': #I will send a mail to author whose 
+            #abstract was approved as a poster
+            mail_subject = 'Abstract Update Notification'
+            message = render_to_string('article/abstract-poster.html',{
+                            'article':article,
+                        })
+            emails =set()
+                        #candidate's email
+            if request.user.email != article.user.email:
+                            emails.add(article.user.email)
+
+                        
+            send_email = EmailMessage(mail_subject, message, to=list(emails))
+                        #print(emails)
+            send_email.content_subtype = 'html'
+            send_email.send()
+            
         article.save()
         comment = request.POST.get('comment')
         saved_comment = Comment.objects.create(
@@ -735,6 +752,22 @@ def admin_casereportcomment(request,pk):
         #print('I am getting here')
         status = request.POST.get('status')
         casereport.status = request.POST.get('status')
+        if casereport.status == 'Accepted as Poster': #I will send a mail to author whose 
+            #abstract was approved as a poster
+            mail_subject = 'Abstract Update Notification'
+            message = render_to_string('article/abstract-poster.html',{
+                            'casereport':casereport,
+                        })
+            emails =set()
+                        #candidate's email
+            
+            emails.add(casereport.user.email)
+
+                        
+            send_email = EmailMessage(mail_subject, message, to=list(emails))
+                        #print(emails)
+            send_email.content_subtype = 'html'
+            send_email.send()
         casereport.save()
         comment = request.POST.get('comment')
         saved_comment = Comment.objects.create(
